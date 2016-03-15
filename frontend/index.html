@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Asynchronous event handlers with HTML5 Web Sockets</title>
+        <meta name="author" content="Ralph Hughes">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <link rel="stylesheet" href="styles.css">
+        <script src="frontend.js"></script>
+
+    </head>
+    <body>
+        Status: <span id="status"></span><br />
+        <input id="open" type="button" value="Connect" />&nbsp;
+        <input id="close" type="button" value="Disconnect" /><br />
+        <input id="text" />&nbsp;<input id="send" type="button" value="Send" /><br />
+        <span id="message"></span>
+
+        <div id="container" oncontextmenu="return false;">
+            <img src="test_pattern.png" alt="Video Feed" id="mainImg"/>
+            <div id="upperDiv" class="overlays"></div>
+            <div id="lowerDiv" class="overlays"></div>
+        </div>
+        <span id="debug"></span>
+        <br/>
+        Ping: <span id="ping">--</span> ms<br/>
+        CPU Temp: <span id="temp">--</span>&#176;C<br/>
+    </body>
+</html>
