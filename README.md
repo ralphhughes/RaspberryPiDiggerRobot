@@ -40,3 +40,11 @@ Code for an articulated 4WD robot chassis with digger arm\bucket. Very low laten
   $ make
   $ sudo make install
 
+* Setup the web socket server
+
+* Setup nginx to proxy the webcam server and the websocket server through port 80
+ $ cp ~/RaspberryPiDiggerRobot/backend/nginx_sites-enabled_default /etc/nginx/sites-enabled/default
+
+* Make the web sockets and the webcam servers autostart on boot
+
+* Reboot

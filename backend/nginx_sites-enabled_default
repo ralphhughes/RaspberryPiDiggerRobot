@@ -1,0 +1,27 @@
+server {
+    listen 80;
+ 
+    root /var/www/html;
+
+    server_name _;
+ 
+    location ~ \.php$ {
+            include snippets/fastcgi-php.conf;
+
+            # With php5-fpm:
+            fastcgi_pass unix:/var/run/php5-fpm.sock;
+    }
+
+    location /websockets {
+        proxy_pass http://127.0.0.1:1337/;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    location /webcam {
+        proxy_pass http://127.0.0.1:8080/;
+    }
+}
