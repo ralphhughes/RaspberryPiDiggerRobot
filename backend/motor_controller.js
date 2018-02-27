@@ -19,12 +19,16 @@ var STEERING_SERVO_MAX_PULSE=2250;
 var BUCKET_SERVO_PIN=7;
 var BUCKET_SERVO_MIN_PULSE=1000;
 var BUCKET_SERVO_MAX_PULSE=2000;
-var ARM_MOTOR_PWM_PIN=4;
+var CAMERA_SERVO_PIN=4;
+var CAMERA_SERVO_MIN_PULSE=1000;
+var CAMERA_SERVO_MAX_PULSE=2000;
+//var ARM_MOTOR_PIN=4;  // No longer using PWM for arm motor
 var ARM_MOTOR_A_GPIO = new GPIO(17, 'out');
 var ARM_MOTOR_B_GPIO = new GPIO(21, 'out');
 var TRACTION_MOTOR_PWM_PIN=18;
 var TRACTION_MOTOR_A_GPIO = new GPIO(24, 'out');
 var TRACTION_MOTOR_B_GPIO = new GPIO(23, 'out');
+var ARM_LIMIT_SWITCH_PIN=-1;
 
 
 var server = http.createServer(function(request, response) {
@@ -107,12 +111,16 @@ function executeCmd(cmd) {
                         ARM_MOTOR_B_GPIO.writeSync(1);
                         break;
                 }
-                var pwm = 255 * (Math.abs(value) / 100);
-                pigpio.setPwmDutycycle(ARM_MOTOR_PWM_PIN, pwm);
+                //var pwm = 255 * (Math.abs(value) / 100);
+                //pigpio.setPwmDutycycle(ARM_MOTOR_PWM_PIN, pwm);
 		break;
 	    case "b":
                 var pw = BUCKET_SERVO_MIN_PULSE + ((value / 100) * (BUCKET_SERVO_MAX_PULSE - BUCKET_SERVO_MIN_PULSE));
                 pigpio.setServoPulsewidth(BUCKET_SERVO_PIN, pw);
+		break;
+            case "c":
+                var pw = CAMERA_SERVO_MIN_PULSE + ((value / 100) * (CAMERA_SERVO_MAX_PULSE - CAMERA_SERVO_MIN_PULSE));
+                pigpio.setServoPulsewidth(CAMERA_SERVO_PIN, pw);
 		break;
 	}
 	    
