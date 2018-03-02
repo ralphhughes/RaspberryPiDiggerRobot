@@ -53,7 +53,7 @@ var wsServer = new WebSocketServer({
 var pigpio = new PiFastGpio();
 
 // Connect to pigpiod daemon
-pigpio.connect('127.0.0.1', PIGPIOD_PORT, function(err) {
+pigpio.connect('::1', PIGPIOD_PORT, function(err) {
   if (err) throw err;
 
 });
