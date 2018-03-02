@@ -41,11 +41,6 @@ window.addEventListener("load", function (event) {
     mainImg.style.width = VIEWPORT_WIDTH + "px";
     mainImg.style.height = VIEWPORT_HEIGHT + "px";
 
-    document.getElementById('upperDiv').style.width = VIEWPORT_WIDTH + "px";
-    document.getElementById('upperDiv').style.height = VIEWPORT_HEIGHT / 2 + "px";
-    document.getElementById('lowerDiv').style.width = VIEWPORT_WIDTH + "px";
-    document.getElementById('lowerDiv').style.height = VIEWPORT_HEIGHT / 2 + "px";
-    document.getElementById('lowerDiv').style.top = VIEWPORT_HEIGHT / 2 + "px";
 
     status.textContent = "Not Connected";
     close.disabled = true;

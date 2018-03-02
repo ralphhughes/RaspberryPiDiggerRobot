@@ -14,19 +14,21 @@
     </head>
     <body>
         Status: <span id="status"></span><br />
-        <input id="open" type="button" value="Connect" />&nbsp;
-        <input id="close" type="button" value="Disconnect" /><br />
-        <input id="text" />&nbsp;<input id="send" type="button" value="Send" /><br />
+        <form>
+            <input id="open" type="button" value="Connect" />&nbsp;
+            <input id="close" type="button" value="Disconnect" /><br />
+            <input id="text" />&nbsp;<input id="send" type="button" value="Send" /><br />
+        </form>
         <span id="message"></span>
 
         <div id="container" oncontextmenu="return false;">
             <img src="test_pattern.png" alt="Video Feed" id="mainImg"/>
-            <div id="upperDiv" class="overlays"></div>
-            <div id="lowerDiv" class="overlays"></div>
         </div>
         <span id="debug"></span>
         <br/>
-        Ping: <span id="ping">--</span> ms<br/>
+        Latency: <span id="ping">--</span> ms<br/>
         CPU Temp: <span id="temp">--</span>&#176;C<br/>
+        Current Drain: <span id="current">--</span> mA<br/>
+
     </body>
 </html>
