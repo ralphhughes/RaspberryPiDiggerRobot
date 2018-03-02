@@ -63,9 +63,14 @@ window.addEventListener("load", function (event) {
         socket.addEventListener("open", function (event) {
             close.disabled = false;
             send.disabled = false;
-            mainImg.src = WEBCAM_URL;
             status.textContent = "Connected";
-
+            
+            // TODO: Really this should be a callback fro the bot to say the camera has
+            // successfully fired up instead of just wait and hope...
+            window.setTimeout(function() {
+                mainImg.src = WEBCAM_URL;
+            },1000);
+            
         });
 
         // Display messages received from the server

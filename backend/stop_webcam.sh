@@ -1,3 +1,3 @@
 #!/bin/sh
 
-sudo killall mjpg-streamer
+sudo killall mjpg_streamer
