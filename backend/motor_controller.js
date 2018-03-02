@@ -52,16 +52,104 @@ var wsServer = new WebSocketServer({
 
 var pigpio = new PiFastGpio();
 
-// Connect to pigpiod daemon
-pigpio.connect('::1', PIGPIOD_PORT, function(err) {
-  if (err) throw err;
-
-});
-
 
 function originIsAllowed(origin) {
   // put logic here to detect whether the specified origin is allowed.
   return true;
+}
+
+wsServer.on('request', function(request) {
+    if (!originIsAllowed(request.origin)) {
+      // Make sure we only accept requests from an allowed origin
+      request.reject();
+      console.log((new Date()) + ' Connection from origin ' + request.origin + ' rejected.');
+      return;
+    }
+
+    var connection = request.accept('echo-protocol', request.origin);
+    console.log((new Date()) + ' Connection accepted.');
+    connection.on('message', function(message) {
+        if (message.type === 'utf8') {
+            console.log('Received Message: ' + message.utf8Data);
+
+	    // May receive multiple commands separated by ','. If so iterate through them
+	    if (message.utf8Data.indexOf(',') > -1) {
+		var cmds = message.utf8Data.split(',');
+		for (var i=0; i < cmds.length; i++) {
+		    executeCmd(cmds[i]);
+		}
+	    } else {
+		executeCmd(message.utf8Data);
+	    }
+            connection.sendUTF(message.utf8Data);
+        } else if (message.type === 'binary') {
+            console.log('Received Binary Message of ' + message.binaryData.length + ' bytes');
+            connection.sendBytes(message.binaryData);
+        }
+    });
+    
+    connection.on('open', function(reasonCode, description) {
+        console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' connected.');
+        openConnection();
+    });
+    
+    connection.on('close', function(reasonCode, description) {
+        console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
+        closeConnection();
+    });
+    
+    
+    var the_interval = 1 * 60 * 1000;
+    setInterval(function () {
+        console.log("Once per minute timer fired.");
+        var child;
+
+        child = exec("vcgencmd measure_temp",
+                function (error, stdout, stderr) {
+                    console.log('stdout: ' + stdout);
+                    console.log('stderr: ' + stderr);
+                    connection.sendUTF(stdout);
+                    if (error !== null) {
+                        console.log('exec error: ' + error);
+                    }
+                });
+
+    }, the_interval);
+});
+
+function openConnection() {
+    // Connect to pigpiod daemon
+    pigpio.connect('::1', PIGPIOD_PORT, function(err) {
+        if (err) throw err;
+    });
+
+    // Start streaming webcam
+    var child = exec("./start_webcam.sh",
+            function (error, stdout, stderr) {
+                console.log('stdout: ' + stdout);
+                console.log('stderr: ' + stderr);
+                connection.sendUTF(stdout);
+                if (error !== null) {
+                    console.log('exec error: ' + error);
+                }
+            });
+}
+
+function closeConnection() {
+    // Disconnect from daemon
+    pigpio.close();
+    
+    // Stop streaming webcam to save power
+    // Start streaming webcam
+    var child = exec("./stop_webcam.sh",
+            function (error, stdout, stderr) {
+                console.log('stdout: ' + stdout);
+                console.log('stderr: ' + stderr);
+                connection.sendUTF(stdout);
+                if (error !== null) {
+                    console.log('exec error: ' + error);
+                }
+            });
 }
 
 function executeCmd(cmd) {
@@ -126,56 +214,3 @@ function executeCmd(cmd) {
 	    
     }
 }
-
-wsServer.on('request', function(request) {
-    if (!originIsAllowed(request.origin)) {
-      // Make sure we only accept requests from an allowed origin
-      request.reject();
-      console.log((new Date()) + ' Connection from origin ' + request.origin + ' rejected.');
-      return;
-    }
-
-    var connection = request.accept('echo-protocol', request.origin);
-    console.log((new Date()) + ' Connection accepted.');
-    connection.on('message', function(message) {
-        if (message.type === 'utf8') {
-            console.log('Received Message: ' + message.utf8Data);
-
-	    // May receive multiple commands separated by ','. If so iterate through them
-	    if (message.utf8Data.indexOf(',') > -1) {
-		var cmds = message.utf8Data.split(',');
-		for (var i=0; i < cmds.length; i++) {
-		    executeCmd(cmds[i]);
-		}
-	    } else {
-		executeCmd(message.utf8Data);
-	    }
-            connection.sendUTF(message.utf8Data);
-        } else if (message.type === 'binary') {
-            console.log('Received Binary Message of ' + message.binaryData.length + ' bytes');
-            connection.sendBytes(message.binaryData);
-        }
-    });
-    connection.on('close', function(reasonCode, description) {
-        console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
-    });
-    
-    var the_interval = 1 * 60 * 1000;
-    setInterval(function () {
-        console.log("Once per minute timer fired.");
-        var child;
-
-        child = exec("vcgencmd measure_temp",
-                function (error, stdout, stderr) {
-                    console.log('stdout: ' + stdout);
-                    console.log('stderr: ' + stderr);
-                    connection.sendUTF(stdout);
-                    if (error !== null) {
-                        console.log('exec error: ' + error);
-                    }
-                });
-
-    }, the_interval);
-});
-
-
