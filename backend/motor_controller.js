@@ -68,7 +68,9 @@ wsServer.on('request', function(request) {
     }
 
     var connection = request.accept('echo-protocol', request.origin);
-    console.log((new Date()) + ' Connection accepted.');
+    console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' connecting...');
+    openConnection();
+    
     connection.on('message', function(message) {
         if (message.type === 'utf8') {
             console.log('Received Message: ' + message.utf8Data);
@@ -89,10 +91,7 @@ wsServer.on('request', function(request) {
         }
     });
     
-    connection.on('open', function(reasonCode, description) {
-        console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' connecting...');
-        openConnection();
-    });
+    
     
     connection.on('close', function(reasonCode, description) {
         console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnecting...');
@@ -145,7 +144,7 @@ function closeConnection() {
     console.log("Disconnecting from pigpiod daemon...");
     pigpio.close();
     
-    console.log("Stoping streaming webcam to save power...");
+    console.log("Stopping streaming webcam to save power...");
     webcamProcess.stdin.pause();
     webcamProcess.kill();
     
