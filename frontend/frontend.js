@@ -3,8 +3,8 @@
 var DEBUG = true;
 
 // Global variables
-var WEBSOCKET_URL = "ws://ralphius.noip.me:88/websockets";
-var WEBCAM_URL = "http://ralphius.noip.me:8080/?action=stream";
+var WEBSOCKET_URL = "ws://" + location.hostname+(location.port ? ':'+location.port: '') + "/websockets";
+var WEBCAM_URL = "/webcam?action=stream";
 
 // Aspect ratio is 3:4, width and height should be multiples of 16, so:
 // 192x256, 288x384*,  336x448, 384x512, 432x576, 480x640, 540x720, 600x800 or even 720x960?

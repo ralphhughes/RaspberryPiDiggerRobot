@@ -9,7 +9,10 @@ function addKeyboardHandlers() {
             sendMessage("a=0, t=0");
             return false; //Stops the PgDown?
         }
-
+        if (e.keyCode === 13) { // Enter: Switch direction?
+            
+            
+        }
         if (e.keyCode === 87) { // W: Forward
             tractionMotor++;
             tractionMotor = cropToRange(tractionMotor, -100, 100);
