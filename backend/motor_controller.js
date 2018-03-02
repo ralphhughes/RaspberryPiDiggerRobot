@@ -100,7 +100,7 @@ wsServer.on('request', function(request) {
     
     
     var the_interval = 1 * 60 * 1000;
-    setInterval(function () {
+    setInterval(() => {
         console.log("Once per minute timer fired.");
         var child;
 

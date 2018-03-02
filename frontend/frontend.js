@@ -75,8 +75,9 @@ window.addEventListener("load", function (event) {
                 ping.textContent = new Date().getTime() - sentTime;
             }
             if (event.data.indexOf("temp=") > -1) {
-                var temp = event.data.split("=")[1];
-                temp.textContent = temp;
+                var tmp = event.data.split("=")[1];
+		tmp = tmp.replace("'C","");
+                temp.textContent = tmp;
             }
             message.textContent = "DEBUG: " + event.data;
         });
