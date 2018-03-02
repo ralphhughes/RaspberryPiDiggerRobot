@@ -31,6 +31,7 @@ var TRACTION_MOTOR_B_GPIO = new GPIO(23, 'out');
 var ARM_LIMIT_SWITCH_PIN=-1;
 
 
+
 var server = http.createServer(function(request, response) {
     console.log((new Date()) + ' Received request for ' + request.url);
     response.writeHead(404);
@@ -51,7 +52,7 @@ var wsServer = new WebSocketServer({
 });
 
 var pigpio = new PiFastGpio();
-
+var webcamProcess;
 
 function originIsAllowed(origin) {
   // put logic here to detect whether the specified origin is allowed.
@@ -89,12 +90,12 @@ wsServer.on('request', function(request) {
     });
     
     connection.on('open', function(reasonCode, description) {
-        console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' connected.');
+        console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' connecting...');
         openConnection();
     });
     
     connection.on('close', function(reasonCode, description) {
-        console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
+        console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnecting...');
         closeConnection();
     });
     
@@ -118,13 +119,13 @@ wsServer.on('request', function(request) {
 });
 
 function openConnection() {
-    // Connect to pigpiod daemon
+    console.log("Connecting to pigpiod daemon...");
     pigpio.connect('::1', PIGPIOD_PORT, function(err) {
         if (err) throw err;
     });
 
-    // Start streaming webcam
-    var child = exec("./start_webcam.sh",
+    console.log("Starting streaming webcam...");
+    webcamProcess = exec("~/RaspberryPiDiggerRobot/backend/start_webcam.sh",
             function (error, stdout, stderr) {
                 console.log('stdout: ' + stdout);
                 console.log('stderr: ' + stderr);
@@ -133,23 +134,22 @@ function openConnection() {
                     console.log('exec error: ' + error);
                 }
             });
+    console.lo("Done.");
 }
 
 function closeConnection() {
-    // Disconnect from daemon
+    console.log("Turning off the motors before disconnecting...");
+    executeCmd("t=0");
+    executeCmd("a=0");
+    
+    console.log("Disconnecting from pigpiod daemon...");
     pigpio.close();
     
-    // Stop streaming webcam to save power
-    // Start streaming webcam
-    var child = exec("./stop_webcam.sh",
-            function (error, stdout, stderr) {
-                console.log('stdout: ' + stdout);
-                console.log('stderr: ' + stderr);
-                connection.sendUTF(stdout);
-                if (error !== null) {
-                    console.log('exec error: ' + error);
-                }
-            });
+    console.log("Stoping streaming webcam to save power...");
+    webcamProcess.stdin.pause();
+    webcamProcess.kill();
+    
+    console.log("Done.");
 }
 
 function executeCmd(cmd) {

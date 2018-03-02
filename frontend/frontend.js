@@ -95,7 +95,6 @@ window.addEventListener("load", function (event) {
     });
     // Close the connection when the Disconnect button is clicked
     close.addEventListener("click", function (event) {
-        socket.send("t=0,a=0"); //Stop the motors first!
         close.disabled = true;
         send.disabled = true;
         message.textContent = "";
