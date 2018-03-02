@@ -124,7 +124,7 @@ function openConnection() {
     });
 
     console.log("Starting streaming webcam...");
-    webcamProcess = exec("~/RaspberryPiDiggerRobot/backend/start_webcam.sh",
+    webcamProcess = exec("./start_webcam.sh",
             function (error, stdout, stderr) {
                 console.log('stdout: ' + stdout);
                 console.log('stderr: ' + stderr);
