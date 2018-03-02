@@ -19,32 +19,31 @@ Code for an articulated 4WD robot chassis with digger arm\bucket. Very low laten
   $ sudo apt-get update && sudo apt-get upgrade
 
 * Install dependencies 
-  $ sudo apt-get install git nginx nodejs pigpio cmake libjpeg8-dev
+  $ sudo apt-get install git nginx nodejs pigpio cmake libjpeg8-dev miniupnpc
 
-* Startup the GPIO daemon 
-  $ sudo systemctl enable pigpiod
-
-* Download this repo:
+* Download this repo to the pi home directory
   $ cd ~
   $ git clone https://github.com/ralphhughes/RaspberryPiDiggerRobot.git
+  $ cd RaspberryPiDiggerRobot
+
+* Setup the web camera server
+  $ ./install_webcam_server.sh
+
+* Setup the web socket server
+  $ ./install_websocket_server.sh
 
 * symlink the frontend folder
   $ cd /var/www
   $ sudo rm -rf html
   $ sudo ln -s ~/RaspberryPiDiggerRobot/frontend ./html
 
-* Setup the webcam streaming server
-  $ cd ~/RaspberryPiDiggerRobot/backend
-  $ git clone https://github.com/jacksonliam/mjpg-streamer.git
-  $ cd mjpg-streamer/mjpg-streamer-experimental
-  $ make
-  $ sudo make install
 
-* Setup the web socket server
 
 * Setup nginx to proxy the webcam server and the websocket server through port 80
  $ cp ~/RaspberryPiDiggerRobot/backend/nginx_sites-enabled_default /etc/nginx/sites-enabled/default
 
-* Make the web sockets and the webcam servers autostart on boot
+* Make the UPNP config, web sockets and the webcam servers autostart on boot
+$ upnpc -a `hostname -I` 80 8080 TCP
 
 * Reboot
+sudo reboot
