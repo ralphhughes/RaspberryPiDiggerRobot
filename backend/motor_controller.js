@@ -128,12 +128,11 @@ function openConnection() {
             function (error, stdout, stderr) {
                 console.log('stdout: ' + stdout);
                 console.log('stderr: ' + stderr);
-                connection.sendUTF(stdout);
                 if (error !== null) {
                     console.log('exec error: ' + error);
                 }
             });
-    console.lo("Done.");
+    console.log("Done.");
 }
 
 function closeConnection() {
