@@ -124,14 +124,7 @@ function openConnection() {
     });
 
     console.log("Starting streaming webcam...");
-    webcamProcess = exec("./start_webcam.sh",
-            function (error, stdout, stderr) {
-                console.log('stdout: ' + stdout);
-                console.log('stderr: ' + stderr);
-                if (error !== null) {
-                    console.log('exec error: ' + error);
-                }
-            });
+    execProcess("./start_webcam.sh");
     console.log("Done.");
 }
 
@@ -144,10 +137,21 @@ function closeConnection() {
     pigpio.close();
     
     console.log("Stopping streaming webcam to save power...");
-    webcamProcess.stdin.pause();
-    webcamProcess.kill();
+    execProcess("./stop_webcam.sh");
     
     console.log("Done.");
+}
+
+function execProcess(proc) {
+    var myProc = exec(proc,
+            function (error, stdout, stderr) {
+                console.log('stdout: ' + stdout);
+                console.log('stderr: ' + stderr);
+                if (error !== null) {
+                    console.log('exec error: ' + error);
+                }
+            });
+    return myProc;
 }
 
 function executeCmd(cmd) {
