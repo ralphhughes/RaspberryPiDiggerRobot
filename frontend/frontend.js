@@ -41,14 +41,14 @@ window.addEventListener("load", function (event) {
 
     // Create a new connection when the Connect button is clicked
     connectBtn.addEventListener("click", function (event) {
-        if (connectBtn.value === "Connect") {
-            setupConnection();
+        if (socket) {
+            socket.close(3001);
         } else {
-            socket.close();
+            setupWSConnection();
         }
     });
     
-    function setupConnection() {
+    function setupWSConnection() {
         socket = new WebSocket(WEBSOCKET_URL, "echo-protocol");        
         
         socket.addEventListener("open", function (event) {
@@ -84,6 +84,12 @@ window.addEventListener("load", function (event) {
         });
 
         socket.addEventListener("close", function (event) {
+            if (event.code === 3001) {
+                console.log("Connection closed by client");
+            } else {
+                alert("Web socket connection error");
+            }
+            socket = null;
             clearInterval(pingTaskID);
             mainImg.src = "images/test_pattern.png";
             send.disabled = true;
@@ -117,7 +123,7 @@ function sendMessage(msg) {
     if (DEBUG) {
         console.log("sendMessage(" + msg + ")");
     }
-    if (typeof socket !== 'undefined') {
+    if (typeof socket !== 'undefined' && socket !== null) {
         if (socket.readyState === 1) { // Connection is running
             socket.send(msg);
         }

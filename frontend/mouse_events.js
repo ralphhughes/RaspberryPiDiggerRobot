@@ -28,7 +28,7 @@ function addMouseHandlers() {
             x = 0;
         }
         
-        console.log("x:" + x);
+        cameraServo = x; // TODO: Need better mapping
         sendMessage("c=" + cameraServo);
     });
 
