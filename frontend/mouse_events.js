@@ -8,18 +8,12 @@ function addMouseHandlers() {
     });
 
 
-    // Event handler for controlling steering and traction motors dependent upon mouse position
+    // Event handler for controlling camera servo dependent on mouse position
     $("#mainImg").mousemove(function (e) {
         var parentOffset = $(this).parent().offset();
         var x = (e.pageX - parentOffset.left); //offset -> method allows you to retrieve the current position of an element 'relative' to the document
-        var y = (e.pageY - parentOffset.top);
         x = Math.round(((x / VIEWPORT_WIDTH) * 120) - 10);
-        y = Math.round(((y / VIEWPORT_HEIGHT) * 250) - (250 / 2));
 
-        // Dead band round center of div to prevent traction motor stall under low duty cycle PWM
-        if (y > -15 && y < 15) {
-            y = 0;
-        }
         // Full power band round edge of div to make it easier to hold mouse on 100%
         if (x > 100) {
             x = 100;
@@ -28,7 +22,7 @@ function addMouseHandlers() {
             x = 0;
         }
         
-        cameraServo = x; // TODO: Need better mapping
+        cameraServo = -x; // TODO: Need better mapping
         sendMessage("c=" + cameraServo);
     });
 
