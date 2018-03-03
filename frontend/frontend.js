@@ -52,7 +52,11 @@ window.addEventListener("load", function (event) {
     // Create a new connection when the Connect button is clicked
     open.addEventListener("click", function (event) {
         open.disabled = true;
-        socket = new WebSocket(WEBSOCKET_URL, "echo-protocol");
+        try {
+            socket = new WebSocket(WEBSOCKET_URL, "echo-protocol");
+        } catch (err) {
+            status.textContent = err.message;
+        }
         pingTaskID = setInterval(pingRobot, 20000);
 
         socket.addEventListener("open", function (event) {

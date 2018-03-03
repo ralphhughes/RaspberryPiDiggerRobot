@@ -23,7 +23,9 @@ Code for an articulated 4WD robot chassis with digger arm\bucket. Very low laten
 
 * Download this repo to the pi home directory
   $ cd ~
+
   $ git clone https://github.com/ralphhughes/RaspberryPiDiggerRobot.git
+
   $ cd RaspberryPiDiggerRobot
 
 * Setup the web camera server
@@ -34,7 +36,9 @@ Code for an articulated 4WD robot chassis with digger arm\bucket. Very low laten
 
 * symlink the frontend folder
   $ cd /var/www
+
   $ sudo rm -rf html
+
   $ sudo ln -s ~/RaspberryPiDiggerRobot/frontend ./html
 
 
@@ -44,8 +48,10 @@ Code for an articulated 4WD robot chassis with digger arm\bucket. Very low laten
 
  $ sudo systemctl restart nginx
 
-* Make the UPNP config, web sockets and the webcam servers autostart on boot
+* Make the UPNP config and the web sockets server autostart on boot
 $ upnpc -a `hostname -I` 80 8080 TCP
 
+$ sudo nodejs ~/RaspberryPiDiggerRobot/backend/backend.js
+
 * Reboot
-sudo reboot
+$ sudo reboot
