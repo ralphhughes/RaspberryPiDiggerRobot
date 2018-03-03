@@ -24,9 +24,7 @@ var pingTaskID;
 
 // Initialize everything when the window finishes loading
 window.addEventListener("load", function (event) {
-    var status = document.getElementById("status");
-    var open = document.getElementById("open");
-    var close = document.getElementById("close");
+    var connectBtn = document.getElementById("connect");
     var send = document.getElementById("send");
     var text = document.getElementById("text");
     var message = document.getElementById("message");
@@ -35,41 +33,35 @@ window.addEventListener("load", function (event) {
     var mainImg = document.getElementById("mainImg");
     var objDiv = document.getElementById('container');
 
-
     objDiv.style.width = VIEWPORT_WIDTH + "px";
     objDiv.style.height = VIEWPORT_HEIGHT + "px";
     mainImg.style.width = VIEWPORT_WIDTH + "px";
     mainImg.style.height = VIEWPORT_HEIGHT + "px";
-
-
-    status.textContent = "Not Connected";
-    close.disabled = true;
     send.disabled = true;
 
-
-
-
     // Create a new connection when the Connect button is clicked
-    open.addEventListener("click", function (event) {
-        open.disabled = true;
-        try {
-            socket = new WebSocket(WEBSOCKET_URL, "echo-protocol");
-        } catch (err) {
-            status.textContent = err.message;
+    connectBtn.addEventListener("click", function (event) {
+        if (connectBtn.value === "Connect") {
+            setupConnection();
+        } else {
+            socket.close();
         }
-        pingTaskID = setInterval(pingRobot, 20000);
-
+    });
+    
+    function setupConnection() {
+        socket = new WebSocket(WEBSOCKET_URL, "echo-protocol");        
+        
         socket.addEventListener("open", function (event) {
-            close.disabled = false;
             send.disabled = false;
-            status.textContent = "Connected";
-            
+            connectBtn.value = "Disconnect";
+
             // TODO: Really this should be a callback fro the bot to say the camera has
             // successfully fired up instead of just wait and hope...
             window.setTimeout(function() {
                 mainImg.src = WEBCAM_URL;
             },1000);
             
+            pingTaskID = setInterval(pingRobot, 20000);
         });
 
         // Display messages received from the server
@@ -93,18 +85,12 @@ window.addEventListener("load", function (event) {
 
         socket.addEventListener("close", function (event) {
             clearInterval(pingTaskID);
-            open.disabled = false;
             mainImg.src = "images/test_pattern.png";
-            status.textContent = "Not Connected";
+            send.disabled = true;
+            message.textContent = "";
+            connectBtn.value = "Connect";
         });
-    });
-    // Close the connection when the Disconnect button is clicked
-    close.addEventListener("click", function (event) {
-        close.disabled = true;
-        send.disabled = true;
-        message.textContent = "";
-        socket.close();
-    });
+    }
 
     // Send text to the server when the Send button is clicked
     send.addEventListener("click", function (event) {
@@ -112,9 +98,6 @@ window.addEventListener("load", function (event) {
         socket.send(text.value);
         text.value = "";
     });
-
-    
-
 
 });
 

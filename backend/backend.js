@@ -52,7 +52,6 @@ var wsServer = new WebSocketServer({
 });
 
 var pigpio = new PiFastGpio();
-var webcamProcess;
 
 function originIsAllowed(origin) {
   // put logic here to detect whether the specified origin is allowed.
