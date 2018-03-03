@@ -1,14 +1,15 @@
 function addMouseHandlers() {
-    $('.overlays').on('mousewheel', function(event) {
+    $('#mainImg').on('mousewheel', function(event) {
         console.log(event.deltaX, event.deltaY, event.deltaFactor);
         bucketServo = bucketServo + event.deltaY;
         bucketServo = cropToRange(bucketServo, 0, 100);
         sendMessage("b=" + bucketServo);
+        return false; // Stop page scrolling up and down
     });
 
 
     // Event handler for controlling steering and traction motors dependent upon mouse position
-    $(".overlays").mousemove(function (e) {
+    $("#mainImg").mousemove(function (e) {
         var parentOffset = $(this).parent().offset();
         var x = (e.pageX - parentOffset.left); //offset -> method allows you to retrieve the current position of an element 'relative' to the document
         var y = (e.pageY - parentOffset.top);
@@ -32,7 +33,7 @@ function addMouseHandlers() {
     });
 
     // Event handler for stopping traction and arm motors when mouse is not on the video stream
-    $(".overlays").mouseleave(function (e) {
+    $("#mainImg").mouseleave(function (e) {
         tractionMotor = 0;
         armMotor = 0;
         // fire ajax call with motor stop signals 
@@ -40,7 +41,7 @@ function addMouseHandlers() {
     });
 
     // Event handler for raising and lowering arm on left/right click
-    $(".overlays").mousedown(function (event) {
+    $("#mainImg").mousedown(function (event) {
         switch (event.which) {
             case 1:
                 armMotor = 100;
@@ -53,7 +54,7 @@ function addMouseHandlers() {
     });
 
     // Event handler for stopping arm motor when mouse button no longer held down
-    $(".overlays").mouseup(function () {
+    $("#mainImg").mouseup(function () {
         armMotor = 0;
         sendMessage("a=" + armMotor);
     });

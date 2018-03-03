@@ -1,0 +1,7 @@
+function addTouchEvents() {
+    
+}
+
+function addTiltEvents() {
+    
+}

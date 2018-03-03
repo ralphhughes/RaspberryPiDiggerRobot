@@ -113,8 +113,6 @@ window.addEventListener("load", function (event) {
         text.value = "";
     });
 
-    addMouseHandlers();
-    addKeyboardHandlers();
     
 
 
