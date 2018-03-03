@@ -10,36 +10,38 @@ Code for an articulated 4WD robot chassis with digger arm\bucket. Very low laten
 
 * SSH onto the pi
 
-* $ sudo raspi-config
+* `$ sudo raspi-config`
+
   Change password, hostname, enable camera, expand filesystem, reboot
 
 * SSH onto pi again
 
 * Make sure up to date with repo
-  $ sudo apt-get update && sudo apt-get upgrade
+
+  `$ sudo apt-get update && sudo apt-get upgrade`
 
 * Install dependencies 
-  $ sudo apt-get install git nginx nodejs pigpio cmake libjpeg8-dev miniupnpc
+
+  `$ sudo apt-get install git nginx nodejs pigpio cmake libjpeg8-dev miniupnpc`
 
 * Download this repo to the pi home directory
-  $ cd ~
+
+  ```$ cd ~
 
   $ git clone https://github.com/ralphhughes/RaspberryPiDiggerRobot.git
 
-  $ cd RaspberryPiDiggerRobot
+  $ cd RaspberryPiDiggerRobot```
 
 * Setup the web camera server
-  $ ./install_webcam_server.sh
+  `$ ./install_webcam_server.sh`
 
 * Setup the web socket server
-  $ ./install_websocket_server.sh
+  `$ ./install_websocket_server.sh`
 
 * symlink the frontend folder
-  $ cd /var/www
-
+  ```$ cd /var/www
   $ sudo rm -rf html
-
-  $ sudo ln -s ~/RaspberryPiDiggerRobot/frontend ./html
+  $ sudo ln -s ~/RaspberryPiDiggerRobot/frontend ./html```
 
 
 
