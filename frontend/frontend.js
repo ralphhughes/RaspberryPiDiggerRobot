@@ -12,11 +12,11 @@ var VIEWPORT_WIDTH = 720;
 var VIEWPORT_HEIGHT = 540;
 
 // Defaults
-var steeringServo = 0;  // [-100%,100%] // Default straight ahead
-var tractionMotor = 0;  // [-100%,100%] // Default stopped
-var armMotor = 0;       // -100,0,100   // Default stopped, no PWM
-var bucketServo = 50;   // [0%, 100%]   // Default half way between bucket up and down
-var cameraServo = 90;   // [0-360]      // Default straight ahead relative to bucket end
+var tractionMotor = 0;      // [-255, 255]  // Default stopped, uses PWM
+var armMotor = 0;           // [-255, 255]  // Default stopped, no PWM
+var steeringServo = 500;    // [0,1000]     // Default straight ahead
+var bucketServo = 500;      // [0, 1000]    // Default half way between bucket up and down
+var cameraServo = 500;      // [0, 1000]    // Default straight ahead relative to bucket end
 
 
 var socket;

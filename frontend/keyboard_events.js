@@ -1,3 +1,5 @@
+"use strict";
+
 function addKeyboardHandlers() {
     // Robot control event handlers below here:
     $(document).keydown(function (e) {
@@ -9,28 +11,28 @@ function addKeyboardHandlers() {
             sendMessage("a=0, t=0");
             return false; //Stops the PgDown?
         }
-        if (e.keyCode === 13) { // Enter: Switch direction?
+        if (e.keyCode === 13) { // Enter: Switch direction or shake bucket?
             
             
         }
         if (e.keyCode === 87) { // W: Forward
             tractionMotor++;
-            tractionMotor = cropToRange(tractionMotor, -100, 100);
+            tractionMotor = cropToRange(tractionMotor, -255, 255);
             sendMessage("t=" + tractionMotor);
         }
         if (e.keyCode === 65) { // A: Left
             steeringServo--;
-            steeringServo = cropToRange(steeringServo, -100, 100);
+            steeringServo = cropToRange(steeringServo, 0, 1000);
             sendMessage("s=" + steeringServo);
         }
         if (e.keyCode === 83) { // S: Backwards
             tractionMotor--;
-            tractionMotor = cropToRange(tractionMotor, -100, 100);
+            tractionMotor = cropToRange(tractionMotor, -255, 255);
             sendMessage("t=" + tractionMotor);
         }
         if (e.keyCode === 68) { // D: Right
             steeringServo++;
-            steeringServo = cropToRange(steeringServo, -100, 100);
+            steeringServo = cropToRange(steeringServo, 0, 1000);
             sendMessage("s=" + steeringServo);
         }
 
@@ -42,20 +44,21 @@ function addKeyboardHandlers() {
         // 49-57 (Num keys 1-9) for bucket angle
         if (e.keyCode >= 49 && e.keyCode <= 57) {
             var numberPressed = e.keyCode - 48;
-            bucketServo = Math.round(((numberPressed - 1) / 8) * 100);
+            bucketServo = Math.round(((numberPressed - 1) / 8) * 1000);
+            bucketServo = cropToRange(bucketServo, 0, 1000);
             sendMessage("b=" + bucketServo);
         }
 
         // plus\minus keys for fine adjustment
         if (e.keyCode === 173) {
             bucketServo--;
-            bucketServo = cropToRange(bucketServo, 0, 100);
+            bucketServo = cropToRange(bucketServo, 0, 1000);
             sendMessage("b=" + bucketServo);
         }
 
         if (e.keyCode === 61) {
             bucketServo++;
-            bucketServo = cropToRange(bucketServo, 0, 100);
+            bucketServo = cropToRange(bucketServo, 0, 1000);
             sendMessage("b=" + bucketServo);
         }
 

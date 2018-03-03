@@ -1,8 +1,9 @@
+"use strict";
 function addMouseHandlers() {
     $('#mainImg').on('mousewheel', function(event) {
         console.log(event.deltaX, event.deltaY, event.deltaFactor);
         bucketServo = bucketServo + event.deltaY;
-        bucketServo = cropToRange(bucketServo, 0, 100);
+        bucketServo = cropToRange(bucketServo, 0, 1000);
         sendMessage("b=" + bucketServo);
         return false; // Stop page scrolling up and down
     });
@@ -21,27 +22,27 @@ function addMouseHandlers() {
         if (x < 0) {
             x = 0;
         }
+        x = 100-x; 
         
-        cameraServo = -x; // TODO: Need better mapping
+        cameraServo = x * 10; // TODO: Need better mapping
         sendMessage("c=" + cameraServo);
     });
 
-    // Event handler for stopping traction and arm motors when mouse is not on the video stream
+    // Event handler for stopping arm motor when mouse is not on the video stream
     $("#mainImg").mouseleave(function (e) {
-        tractionMotor = 0;
         armMotor = 0;
         // fire ajax call with motor stop signals 
-        sendMessage("t=0,a=0");
+        sendMessage("a=0");
     });
 
     // Event handler for raising and lowering arm on left/right click
     $("#mainImg").mousedown(function (event) {
         switch (event.which) {
             case 1:
-                armMotor = 100;
+                armMotor = 255;
                 break;
             case 3:
-                armMotor = -100;
+                armMotor = -255;
                 break;
         }
         sendMessage("a=" + armMotor);

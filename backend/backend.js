@@ -157,15 +157,12 @@ function executeCmd(cmd) {
     if (cmd.indexOf('=') > -1) {
 	// Split a single command into a name-value pair
 	var param = cmd.split('=')[0].trim();
-        // Note that value is an int in the range -100 <= n <= 100 for compatibility with the PHP front end
+        // Note that value is an integer. Range is [0,1000] for servo's, [-255, 255] for reversible motors 
 	var value = parseInt(cmd.split('=')[1]); 
-
+        value = parseInt(value, 10); // force radix to 10 cos don't want it trying to parse hex
 	switch (param) {
-	    case "s":
-                var pw = STEERING_SERVO_MIN_PULSE + ((value / 100) * (STEERING_SERVO_MAX_PULSE - STEERING_SERVO_MIN_PULSE));
-		pigpio.setServoPulsewidth(STEERING_SERVO_PIN, pw);		
-		break;
 	    case "t":
+                value = cropToRange(value,-255,255);
                 switch (true) {
                     case value < 0:
                         TRACTION_MOTOR_A_GPIO.writeSync(1);
@@ -181,10 +178,11 @@ function executeCmd(cmd) {
                         TRACTION_MOTOR_B_GPIO.writeSync(1);
                         break;
                 }
-                var pwm = 255 * (Math.abs(value) / 100);
+                var pwm = Math.abs(value);
                 pigpio.setPwmDutycycle(TRACTION_MOTOR_PWM_PIN, pwm);
                 break;
             case "a":
+                value = cropToRange(value,-255,255);
                 switch (true) {
                     case value < 0:
                         ARM_MOTOR_A_GPIO.writeSync(1);
@@ -200,18 +198,33 @@ function executeCmd(cmd) {
                         ARM_MOTOR_B_GPIO.writeSync(1);
                         break;
                 }
-                //var pwm = 255 * (Math.abs(value) / 100);
-                //pigpio.setPwmDutycycle(ARM_MOTOR_PWM_PIN, pwm);
 		break;
-	    case "b":
-                var pw = BUCKET_SERVO_MIN_PULSE + ((value / 100) * (BUCKET_SERVO_MAX_PULSE - BUCKET_SERVO_MIN_PULSE));
+	    case "s":
+                value = cropToRange(value,0,1000);
+                var pw = STEERING_SERVO_MIN_PULSE + ((value / 1000) * (STEERING_SERVO_MAX_PULSE - STEERING_SERVO_MIN_PULSE));
+		pigpio.setServoPulsewidth(STEERING_SERVO_PIN, pw);		
+		break;
+            case "b":
+                value = cropToRange(value,0,1000);
+                var pw = BUCKET_SERVO_MIN_PULSE + ((value / 1000) * (BUCKET_SERVO_MAX_PULSE - BUCKET_SERVO_MIN_PULSE));
                 pigpio.setServoPulsewidth(BUCKET_SERVO_PIN, pw);
 		break;
             case "c":
-                var pw = CAMERA_SERVO_MIN_PULSE + ((value / 100) * (CAMERA_SERVO_MAX_PULSE - CAMERA_SERVO_MIN_PULSE));
+                value = cropToRange(value,0,1000);
+                var pw = CAMERA_SERVO_MIN_PULSE + ((value / 1000) * (CAMERA_SERVO_MAX_PULSE - CAMERA_SERVO_MIN_PULSE));
                 pigpio.setServoPulsewidth(CAMERA_SERVO_PIN, pw);
 		break;
 	}
 	    
     }
+}
+
+function cropToRange(value, min, max) {
+    if (value > max) {
+        value = max;
+    }
+    if (value < min) {
+        value = min;
+    }
+    return value;
 }
