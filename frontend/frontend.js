@@ -94,7 +94,7 @@ window.addEventListener("load", function (event) {
         socket.addEventListener("close", function (event) {
             clearInterval(pingTaskID);
             open.disabled = false;
-            mainImg.src = "test_pattern.png";
+            mainImg.src = "images/test_pattern.png";
             status.textContent = "Not Connected";
         });
     });
