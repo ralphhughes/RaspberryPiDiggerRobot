@@ -33,9 +33,11 @@ Code for an articulated 4WD robot chassis with digger arm\bucket. Very low laten
   $ cd RaspberryPiDiggerRobot```
 
 * Setup the web camera server
+
   `$ ./install_webcam_server.sh`
 
 * Setup the web socket server
+
   `$ ./install_websocket_server.sh`
 
 * symlink the frontend folder
@@ -46,14 +48,12 @@ Code for an articulated 4WD robot chassis with digger arm\bucket. Very low laten
 
 
 * Setup nginx to proxy the webcam server and the websocket server through port 80
+```
  $ cp ~/RaspberryPiDiggerRobot/backend/nginx_sites-enabled_default /etc/nginx/sites-enabled/default
-
- $ sudo systemctl restart nginx
+ $ sudo systemctl restart nginx```
 
 * Make the UPNP config and the web sockets server autostart on boot
-$ upnpc -a `hostname -I` 80 8080 TCP
 
+```$ upnpc -a `hostname -I` 80 8080 TCP
 $ sudo nodejs ~/RaspberryPiDiggerRobot/backend/backend.js
-
-* Reboot
-$ sudo reboot
+$ sudo reboot```
