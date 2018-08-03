@@ -19,6 +19,7 @@ var bucketServo = 500;      // [0, 1000]    // Default half way between bucket u
 var cameraServo = 500;      // [0, 1000]    // Default straight ahead relative to bucket end
 
 var steeringDelta = 20;
+var bucketDelta = 50;
 
 var socket;
 var pingTaskID;

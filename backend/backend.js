@@ -40,7 +40,8 @@ const CAMERA_SERVO_MIN_PULSE=1000;
 const CAMERA_SERVO_MAX_PULSE=2000;
 const ARM_MOTOR_A_GPIO = new GPIO(5, 'out');
 const ARM_MOTOR_B_GPIO = new GPIO(6, 'out');
-const TRACTION_MOTOR_PWM_PIN=17;
+const ARM_MOTOR_PWM_PIN = new GPIO(17,'out');
+const TRACTION_MOTOR_PWM_PIN = 26;
 const TRACTION_MOTOR_A_GPIO = new GPIO(27, 'out');
 const TRACTION_MOTOR_B_GPIO = new GPIO(4, 'out');
 const ARM_LIMIT_SWITCH_PIN=-1;
@@ -136,7 +137,7 @@ function openConnection() {
     pigpio.connect('::1', PIGPIOD_PORT, function(err) {
         if (err) throw err;
     });
-
+    ARM_MOTOR_PWM_PIN.writeSync(1);
     console.log("Starting streaming webcam...");
     execProcess("./start_webcam.sh");
     console.log("Done.");
