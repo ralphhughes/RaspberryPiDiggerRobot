@@ -2,16 +2,17 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>rpi-robot - Low latency streaming & websockets test</title>
+        <title>DiggerRobot</title>
         <meta name="author" content="Ralph Hughes">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.13/jquery.mousewheel.min.js"></script>
+        <script src="lib/jquery.mousewheel.min.js"></script>
+        <script src="lib/gauge.min.js"></script>
         
-        <link rel="stylesheet" href="styles.css">
-        <script src="frontend.js"></script>
-        <script src="mobile_events.js"></script>
-        <script src="mouse_events.js"></script>
-        <script src="keyboard_events.js"></script>
+        <link rel="stylesheet" href="css/styles.css">
+        <script src="js/frontend.js"></script>
+        <script src="js/mobile_events.js"></script>
+        <script src="js/mouse_events.js"></script>
+        <script src="js/keyboard_events.js"></script>
         
         <script>
             $( document ).ready(function() {      
@@ -37,10 +38,45 @@
             <img src="images/test_pattern.png" alt="Video Feed" id="mainImg"/>
         </div>
         <span id="debug"></span>
-        <br/>
+        <hr/>
+        <h5>Unfinished status overlays</h5>
+        <canvas data-type="radial-gauge"
+    data-width="30"
+    data-height="30"
+    data-min-value="0"
+    data-start-angle="90"
+    data-ticks-angle="180"
+    data-value-box="false"
+    data-max-value="100"
+    data-major-ticks="0,20,40,60,80,100"
+    data-minor-ticks="2"
+    data-stroke-ticks="true"
+    data-highlights='[
+        {"from": 80, "to": 100, "color": "rgba(200, 50, 50, .75)"}
+    ]'
+    data-color-plate="#fff"
+    data-border-shadow-width="0"
+    data-borders="false"
+    data-needle-type="arrow"
+    data-needle-width="2"
+    data-needle-circle-size="7"
+    data-needle-circle-outer="true"
+    data-needle-circle-inner="false"
+    data-animation-duration="1500"
+    data-animation-rule="linear"
+></canvas>
         Latency: <span id="ping">--</span> ms<br/>
         CPU Temp: <span id="temp">--</span>&#176;C<br/>
         Current Drain: <span id="current">--</span> mA<br/>
-
+        <hr/>
+        <h5>Help \ Controls</h5>
+        <ul>
+            <li><img src="images/icons8-keyboard-40.png" alt="W,A,S,D"/> W,A,S,D - Controls forwards, backwards and steering of the robot</li>
+            <li><img src="images/icons8-cursor-40.png" alt="Move mouse"/> - Controls direction camera on robot faces</li>
+            <li><img src="images/icons8-left-click-40.png" alt="Left click"/> - Move digger arm up</li>
+            <li><img src="images/icons8-mouse-right-click-40.png" alt="Right click"/> - Move digger arm down</li>
+            <li><img src="images/icons8-mouse-scrolling-40.png" alt="Scrollwheel"/> - Tilt bucket with scrollwheel</li>
+            <li><img src="images/icons8-esc-40.png" alt="Esc or spacebar"/>[Esc] or [Spacebar] - Stop</li>
+        </ul>
     </body>
 </html>
