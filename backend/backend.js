@@ -29,20 +29,20 @@ button.on('alert', (level, tick) => {
 });
 
 // Easier configuring here than moving wires inside the bot
-const STEERING_SERVO_PIN=8;
+const STEERING_SERVO_PIN=24;
 const STEERING_SERVO_MIN_PULSE=770;
 const STEERING_SERVO_MAX_PULSE=2250;
-const BUCKET_SERVO_PIN=7;
+const BUCKET_SERVO_PIN=25;
 const BUCKET_SERVO_MIN_PULSE=1000;
 const BUCKET_SERVO_MAX_PULSE=2000;
-const CAMERA_SERVO_PIN=25;
+const CAMERA_SERVO_PIN=-1;
 const CAMERA_SERVO_MIN_PULSE=1000;
 const CAMERA_SERVO_MAX_PULSE=2000;
-const ARM_MOTOR_A_GPIO = new GPIO(17, 'out');
-const ARM_MOTOR_B_GPIO = new GPIO(21, 'out');
-const TRACTION_MOTOR_PWM_PIN=18;
-const TRACTION_MOTOR_A_GPIO = new GPIO(24, 'out');
-const TRACTION_MOTOR_B_GPIO = new GPIO(23, 'out');
+const ARM_MOTOR_A_GPIO = new GPIO(5, 'out');
+const ARM_MOTOR_B_GPIO = new GPIO(6, 'out');
+const TRACTION_MOTOR_PWM_PIN=17;
+const TRACTION_MOTOR_A_GPIO = new GPIO(27, 'out');
+const TRACTION_MOTOR_B_GPIO = new GPIO(4, 'out');
 const ARM_LIMIT_SWITCH_PIN=-1;
 
 
