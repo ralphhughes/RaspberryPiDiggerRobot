@@ -21,7 +21,7 @@ function addKeyboardHandlers() {
             sendMessage("t=" + tractionMotor);
         }
         if (e.keyCode === 65) { // A: Left
-            steeringServo = steeringServo - steeringDelta;
+            steeringServo = steeringServo + steeringDelta;
             steeringServo = cropToRange(steeringServo, 0, 1000);
             sendMessage("s=" + steeringServo);
         }
@@ -31,7 +31,7 @@ function addKeyboardHandlers() {
             sendMessage("t=" + tractionMotor);
         }
         if (e.keyCode === 68) { // D: Right
-            steeringServo = steeringServo + steeringDelta;
+            steeringServo = steeringServo - steeringDelta;
             steeringServo = cropToRange(steeringServo, 0, 1000);
             sendMessage("s=" + steeringServo);
         }
