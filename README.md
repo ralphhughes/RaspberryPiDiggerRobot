@@ -22,7 +22,7 @@ Code for an articulated 4WD robot chassis with digger arm\bucket. Very low laten
 
 * Install dependencies 
 
-  `$ sudo apt-get install git nginx nodejs pigpio cmake libjpeg8-dev miniupnpc`
+  `$ sudo apt-get install git nginx nodejs nodejs-legacy pigpio cmake libjpeg8-dev miniupnpc`
 
 * Download this repo to the pi home directory
 ```
