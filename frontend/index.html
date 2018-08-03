@@ -24,6 +24,16 @@
                     addMouseHandlers();
                     addKeyboardHandlers();
                 }
+                
+                var intervalId = setInterval(function(){
+                    // UI update loop
+                    var valueForGauge1 = Math.abs(Math.round(100 * (tractionMotor/255)));
+                    tractionMotorGauge.value = valueForGauge1;
+                    
+                    var valueForGauge2 = Math.round(100 * ((steeringServo-500) / 500));
+                    steeringServoGauge.value = valueForGauge2;
+                }, 150);
+
              });
         </script>
     </head>
@@ -40,31 +50,9 @@
         <span id="debug"></span>
         <hr/>
         <h5>Unfinished status overlays</h5>
-        <canvas data-type="radial-gauge"
-    data-width="30"
-    data-height="30"
-    data-min-value="0"
-    data-start-angle="90"
-    data-ticks-angle="180"
-    data-value-box="false"
-    data-max-value="100"
-    data-major-ticks="0,20,40,60,80,100"
-    data-minor-ticks="2"
-    data-stroke-ticks="true"
-    data-highlights='[
-        {"from": 80, "to": 100, "color": "rgba(200, 50, 50, .75)"}
-    ]'
-    data-color-plate="#fff"
-    data-border-shadow-width="0"
-    data-borders="false"
-    data-needle-type="arrow"
-    data-needle-width="2"
-    data-needle-circle-size="7"
-    data-needle-circle-outer="true"
-    data-needle-circle-inner="false"
-    data-animation-duration="1500"
-    data-animation-rule="linear"
-></canvas>
+        <canvas id="gauge1"></canvas>
+        <canvas id="gauge2"></canvas>
+        <br/>
         Latency: <span id="ping">--</span> ms<br/>
         CPU Temp: <span id="temp">--</span>&#176;C<br/>
         Current Drain: <span id="current">--</span> mA<br/>
@@ -78,5 +66,47 @@
             <li><img src="images/icons8-mouse-scrolling-40.png" alt="Scrollwheel"/> - Tilt bucket with scrollwheel</li>
             <li><img src="images/icons8-esc-40.png" alt="Esc or spacebar"/>[Esc] or [Spacebar] - Stop</li>
         </ul>
+        
+        <script>
+            // Configure the JS gauges
+            var tractionMotorGauge = new RadialGauge({
+                renderTo: 'gauge1',
+                width: 100,
+                height: 100,
+                minValue: '0',
+                maxValue: '100',
+                value: '0',
+                borders: false,
+                valueBox: false,
+                majorTicks: ['0','10','20','30','40','50','60','70','80','90','100'],
+                animation: false
+            });
+            tractionMotorGauge.draw();
+            
+            var steeringServoGauge = new RadialGauge({
+                renderTo: 'gauge2',
+                width: 150,
+                height: 150,
+                minValue: '-100',
+                maxValue: '100',
+                value: '0',
+                borders: false,
+                valueBox: false,
+                majorTicks: ['-100','-80','-60','-40','-20','0','20','40','60','80','100'],
+                startAngle: 90,
+                ticksAngle: 180,
+                colorPlate: "#fff",
+                borderShadowWidth: 0,
+                borders: false,
+                needleType: "arrow",
+                needleWidth: 2,
+                needleCircleSize: 7,
+                needleCircleOuter: true,
+                needleCircleInner: false,
+                animation: false
+            });
+            steeringServoGauge.draw();
+            
+        </script>
     </body>
 </html>

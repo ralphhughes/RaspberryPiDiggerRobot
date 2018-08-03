@@ -18,6 +18,7 @@ var steeringServo = 500;    // [0,1000]     // Default straight ahead
 var bucketServo = 500;      // [0, 1000]    // Default half way between bucket up and down
 var cameraServo = 500;      // [0, 1000]    // Default straight ahead relative to bucket end
 
+var steeringDelta = 20;
 
 var socket;
 var pingTaskID;
@@ -55,7 +56,7 @@ window.addEventListener("load", function (event) {
             send.disabled = false;
             connectBtn.value = "Disconnect";
 
-            // TODO: Really this should be a callback fro the bot to say the camera has
+            // TODO: Really this should be a callback from the robot to say the camera has
             // successfully fired up instead of just wait and hope...
             window.setTimeout(function() {
                 mainImg.src = WEBCAM_URL;
@@ -121,7 +122,7 @@ function cropToRange(value, min, max) {
 // Function to wrap socket.send()
 function sendMessage(msg) {
     if (DEBUG) {
-        console.log("sendMessage(" + msg + ")");
+        // console.log("sendMessage(" + msg + ")");
     }
     if (typeof socket !== 'undefined' && socket !== null) {
         if (socket.readyState === 1) { // Connection is running
@@ -133,7 +134,4 @@ function sendMessage(msg) {
 function pingRobot() {
     sendMessage("ping=" + new Date().getTime());
 }
-
-
-
 

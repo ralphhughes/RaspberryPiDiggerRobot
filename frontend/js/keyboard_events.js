@@ -3,7 +3,7 @@
 function addKeyboardHandlers() {
     // Robot control event handlers below here:
     $(document).keydown(function (e) {
-        console.log("keycode: " + e.keyCode);
+        // console.log("keycode: " + e.keyCode);
         // If escape or space is pressed, stop all motors
         if (e.keyCode === 27 || e.keyCode === 32) {
             tractionMotor = 0;
@@ -21,7 +21,7 @@ function addKeyboardHandlers() {
             sendMessage("t=" + tractionMotor);
         }
         if (e.keyCode === 65) { // A: Left
-            steeringServo--;
+            steeringServo = steeringServo - steeringDelta;
             steeringServo = cropToRange(steeringServo, 0, 1000);
             sendMessage("s=" + steeringServo);
         }
@@ -31,7 +31,7 @@ function addKeyboardHandlers() {
             sendMessage("t=" + tractionMotor);
         }
         if (e.keyCode === 68) { // D: Right
-            steeringServo++;
+            steeringServo = steeringServo + steeringDelta;
             steeringServo = cropToRange(steeringServo, 0, 1000);
             sendMessage("s=" + steeringServo);
         }
