@@ -1,34 +1,49 @@
 "use strict";
 
+// Dependencies
 var GPIO = require('onoff').Gpio;
 var WebSocketServer = require('websocket').server;
 var http = require('http');
 var PiFastGpio = require('./pi-fast-gpio.js');
 var exec = require('child_process').exec;
 
-// Can't use const for constants cos netbeans JS syntax checker chokes on it
+const Gpio = require('pigpio').Gpio;        // https://github.com/fivdi/pigpio
 
 // These ports should NOT be internet accessible!
-var WEBSOCKET_PORT = 1337;
-var PIGPIOD_PORT = 8888;
+const WEBSOCKET_PORT = 1337;
+const PIGPIOD_PORT = 8888;
+
+const button = new Gpio(4, {
+  mode: Gpio.INPUT,
+  pullUpDown: Gpio.PUD_UP,
+  alert: true
+});
+
+// Level must be stable for 10 ms before an alert event is emitted.
+button.glitchFilter(10000);
+
+button.on('alert', (level, tick) => {
+  if (level === 0) {
+    console.log('Button event handler fired');
+  }
+});
 
 // Easier configuring here than moving wires inside the bot
-var STEERING_SERVO_PIN=8;
-var STEERING_SERVO_MIN_PULSE=770;
-var STEERING_SERVO_MAX_PULSE=2250;
-var BUCKET_SERVO_PIN=7;
-var BUCKET_SERVO_MIN_PULSE=1000;
-var BUCKET_SERVO_MAX_PULSE=2000;
-var CAMERA_SERVO_PIN=25;
-var CAMERA_SERVO_MIN_PULSE=1000;
-var CAMERA_SERVO_MAX_PULSE=2000;
-//var ARM_MOTOR_PIN=4;  // No longer using PWM for arm motor
-var ARM_MOTOR_A_GPIO = new GPIO(17, 'out');
-var ARM_MOTOR_B_GPIO = new GPIO(21, 'out');
-var TRACTION_MOTOR_PWM_PIN=18;
-var TRACTION_MOTOR_A_GPIO = new GPIO(24, 'out');
-var TRACTION_MOTOR_B_GPIO = new GPIO(23, 'out');
-var ARM_LIMIT_SWITCH_PIN=-1;
+const STEERING_SERVO_PIN=8;
+const STEERING_SERVO_MIN_PULSE=770;
+const STEERING_SERVO_MAX_PULSE=2250;
+const BUCKET_SERVO_PIN=7;
+const BUCKET_SERVO_MIN_PULSE=1000;
+const BUCKET_SERVO_MAX_PULSE=2000;
+const CAMERA_SERVO_PIN=25;
+const CAMERA_SERVO_MIN_PULSE=1000;
+const CAMERA_SERVO_MAX_PULSE=2000;
+const ARM_MOTOR_A_GPIO = new GPIO(17, 'out');
+const ARM_MOTOR_B_GPIO = new GPIO(21, 'out');
+const TRACTION_MOTOR_PWM_PIN=18;
+const TRACTION_MOTOR_A_GPIO = new GPIO(24, 'out');
+const TRACTION_MOTOR_B_GPIO = new GPIO(23, 'out');
+const ARM_LIMIT_SWITCH_PIN=-1;
 
 
 
@@ -163,6 +178,7 @@ function executeCmd(cmd) {
 	switch (param) {
 	    case "t":
                 value = cropToRange(value,-255,255);
+                value = pwmDeadband(value);
                 switch (true) {
                     case value < 0:
                         TRACTION_MOTOR_A_GPIO.writeSync(1);
@@ -183,6 +199,7 @@ function executeCmd(cmd) {
                 break;
             case "a":
                 value = cropToRange(value,-255,255);
+                value = pwmDeadband(value);
                 switch (true) {
                     case value < 0:
                         ARM_MOTOR_A_GPIO.writeSync(1);
@@ -219,6 +236,12 @@ function executeCmd(cmd) {
     }
 }
 
+function pwmDeadband(value) {
+    if (Math.abs(value) < (255*0.2)) {     // 20% deadband to protect motors from stalling
+        value = 0;
+    }
+    return value;
+}
 function cropToRange(value, min, max) {
     if (value > max) {
         value = max;
