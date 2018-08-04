@@ -140,25 +140,23 @@ function pingRobot() {
 }
 
 function updateUI() {
-    function() {
-        // UI update loop
-        /*
-            Motor	Gauge
-            -255	100
-            -51	1
-            0	0
-            51	1
-            255	100
-         */
-        var valueForGauge1 = Math.abs(Math.round(100 * (tractionMotor/255)));
-        tractionMotorGauge.value = valueForGauge1;
+    // UI update loop
+    /*
+        Motor	Gauge
+        -255	100
+        -51	1
+        0	0
+        51	1
+        255	100
+     */
+    var valueForGauge1 = Math.abs(Math.round(100 * (tractionMotor/255)));
+    tractionMotorGauge.value = valueForGauge1;
 
-        if (tractionMotor > 0) {
-            var valueForGauge2 = Math.round(-100 * ((steeringServo-500) / 500));
-            steeringServoGauge.value = valueForGauge2;
-        } else {
-            var valueForGauge2 = Math.round(100 * ((steeringServo-500) / 500));
-            steeringServoGauge.value = valueForGauge2;
-        }
+    if (tractionMotor > 0) {
+        var valueForGauge2 = Math.round(-100 * ((steeringServo-500) / 500));
+        steeringServoGauge.value = valueForGauge2;
+    } else {
+        var valueForGauge2 = Math.round(100 * ((steeringServo-500) / 500));
+        steeringServoGauge.value = valueForGauge2;
     }
 }
