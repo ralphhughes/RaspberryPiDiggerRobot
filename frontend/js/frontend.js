@@ -19,10 +19,11 @@ var bucketServo = 500;      // [0, 1000]    // Default half way between bucket u
 var cameraServo = 500;      // [0, 1000]    // Default straight ahead relative to bucket end
 
 var steeringDelta = 20;
-var bucketDelta = 50;
+var bucketDelta = 20;
 
 var tractionMotorGauge;
 var steeringServoGauge;
+var bucketServoGauge;
 
 var socket;
 var pingTaskID;
@@ -141,17 +142,11 @@ function pingRobot() {
 
 function updateUI() {
     // UI update loop
-    /*
-        Motor	Gauge
-        -255	100
-        -51	1
-        0	0
-        51	1
-        255	100
-     */
+
     var valueForGauge1 = Math.abs(Math.round(100 * (tractionMotor/255)));
     tractionMotorGauge.value = valueForGauge1;
 
+    // Flip the steering gauge depending if we're going forwards or backwards
     if (tractionMotor > 0) {
         var valueForGauge2 = Math.round(-100 * ((steeringServo-500) / 500));
         steeringServoGauge.value = valueForGauge2;
@@ -159,4 +154,7 @@ function updateUI() {
         var valueForGauge2 = Math.round(100 * ((steeringServo-500) / 500));
         steeringServoGauge.value = valueForGauge2;
     }
+    
+    var valueForGauge3 = Math.round(100 * (bucketServo-500)/500);
+    bucketServoGauge.value = valueForGauge3;
 }

@@ -1,7 +1,7 @@
 "use strict";
 function addMouseHandlers() {
     $('#mainImg').on('mousewheel', function(event) {
-        console.log(event.deltaX, event.deltaY, event.deltaFactor);
+        // console.log(event.deltaX, event.deltaY, event.deltaFactor);
         bucketServo = bucketServo + (-event.deltaY * bucketDelta);
         bucketServo = cropToRange(bucketServo, 0, 1000);
         sendMessage("b=" + bucketServo);
