@@ -17,6 +17,12 @@ function addKeyboardHandlers() {
         }
         if (e.keyCode === 87) { // W: Forward
             tractionMotor++;
+            if (tractionMotor > 0 && tractionMotor <= 50) {
+                tractionMotor = 51;
+            }
+            if (tractionMotor >= -50 && tractionMotor < 0) {
+                tractionMotor = 0;
+            }
             tractionMotor = cropToRange(tractionMotor, -255, 255);
             sendMessage("t=" + tractionMotor);
         }
@@ -27,6 +33,13 @@ function addKeyboardHandlers() {
         }
         if (e.keyCode === 83) { // S: Backwards
             tractionMotor--;
+            // Deadband
+            if (tractionMotor > 0 && tractionMotor <= 50) {
+                tractionMotor = 0;
+            }
+            if (tractionMotor < 0 && tractionMotor >= -50) {
+                tractionMotor = -51;
+            }
             tractionMotor = cropToRange(tractionMotor, -255, 255);
             sendMessage("t=" + tractionMotor);
         }
