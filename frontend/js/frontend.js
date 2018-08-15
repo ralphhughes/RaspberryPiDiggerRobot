@@ -3,7 +3,7 @@
 var DEBUG = true;
 
 // Global variables
-var WEBSOCKET_URL = "ws://" + location.hostname+(location.port ? ':'+location.port: '') + "/websockets";
+var WEBSOCKET_URL = (location.protocol.match(/^https/) ? "wss" : "ws") + "://" + location.hostname+(location.port ? ':'+location.port: '') + "/websockets";
 var WEBCAM_URL = "/webcam?action=stream";
 
 // Aspect ratio is 3:4, width and height should be multiples of 16, so:
@@ -55,6 +55,7 @@ window.addEventListener("load", function (event) {
     });
     
     function setupWSConnection() {
+        console.log("Attempting to connect to: " + WEBSOCKET_URL);
         socket = new WebSocket(WEBSOCKET_URL, "echo-protocol");        
         
         socket.addEventListener("open", function (event) {
