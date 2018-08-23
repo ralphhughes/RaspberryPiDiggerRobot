@@ -9,12 +9,7 @@ const Server    = require('./_server');
 
 class RpiServer extends Server {
 
-  constructor(server, opts) {
-    super(server, merge({
-      fps : 12,
-    }, opts));
-  }
-
+  
   get_feed() {
     var msk = "raspivid -t 0 -o - -w %d -h %d -fps %d";
     var cmd = util.format(msk, this.options.width, this.options.height, this.options.fps);

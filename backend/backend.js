@@ -49,7 +49,7 @@ const ARM_LIMIT_SWITCH_PIN=-1;
 
 
 var server = http.createServer(function(request, response) {
-    console.log((new Date()) + ' Received request for ' + request.url);
+    console.log((new Date()) + ' Received HTTP request on ' + WEBSOCKET_PORT + ' for ' + request.url);
     response.writeHead(404);
     response.end();
 });

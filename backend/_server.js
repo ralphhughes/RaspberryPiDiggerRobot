@@ -15,6 +15,7 @@ class _Server {
     this.options = merge({
         width : 960,
         height: 540,
+        fps: 12
     }, options);
 
     this.wss = new WebSocketServer({ server });
