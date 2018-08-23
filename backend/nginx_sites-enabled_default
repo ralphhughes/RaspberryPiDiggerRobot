@@ -12,6 +12,7 @@ server {
             fastcgi_pass unix:/var/run/php5-fpm.sock;
     }
 
+    # Proxy for web sockets robot control channel
     location /websockets {
         proxy_pass http://127.0.0.1:1337/;
         proxy_http_version 1.1;
@@ -21,7 +22,19 @@ server {
         proxy_cache_bypass $http_upgrade;
     }
 
+    # Proxy for mjpeg-streamer-experimental
     location /webcam {
         proxy_pass http://127.0.0.1:8080/;
     }
+
+    # Proxy for H264 streamer
+    location /h264-streamer {
+        proxy_pass http://127.0.0.1:8080/;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+
 }
