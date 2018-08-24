@@ -198,7 +198,7 @@ function executeCmd(cmd) {
                         TRACTION_MOTOR_B.digitalWrite(1);
                         break;
                 }
-                var pwm = Math.abs(value);
+                var pwm = Math.round(Math.abs(value));
                 TRACTION_MOTOR_PWM.pwmWrite(pwm);
                 break;
             case "a":
@@ -223,17 +223,17 @@ function executeCmd(cmd) {
 		break;
 	    case "s":
                 value = cropToRange(value,0,1000);
-                var pw = STEERING_SERVO_MIN_PULSE + ((value / 1000) * (STEERING_SERVO_MAX_PULSE - STEERING_SERVO_MIN_PULSE));
+                var pw = Math.round(STEERING_SERVO_MIN_PULSE + ((value / 1000) * (STEERING_SERVO_MAX_PULSE - STEERING_SERVO_MIN_PULSE)));
 		STEERING_SERVO.servoWrite(pw);
 		break;
             case "b":
                 value = cropToRange(value,0,1000);
-                var pw = BUCKET_SERVO_MIN_PULSE + ((value / 1000) * (BUCKET_SERVO_MAX_PULSE - BUCKET_SERVO_MIN_PULSE));
+                var pw = Math.round(BUCKET_SERVO_MIN_PULSE + ((value / 1000) * (BUCKET_SERVO_MAX_PULSE - BUCKET_SERVO_MIN_PULSE)));
                 BUCKET_SERVO.servoWrite(pw);
 		break;
             case "c":
                 value = cropToRange(value,0,1000);
-                var pw = CAMERA_SERVO_MIN_PULSE + ((value / 1000) * (CAMERA_SERVO_MAX_PULSE - CAMERA_SERVO_MIN_PULSE));
+                var pw = Math.round(CAMERA_SERVO_MIN_PULSE + ((value / 1000) * (CAMERA_SERVO_MAX_PULSE - CAMERA_SERVO_MIN_PULSE)));
                 CAMERA_SERVO.servoWrite(pw);
 		break;
 	}
