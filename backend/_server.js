@@ -1,7 +1,10 @@
 "use strict";
 
 
-const WebSocketServer = require('ws').Server;
+const WebSocket = require('ws');
+const WebSocketServer = WebSocket.Server;
+
+
 const Splitter        = require('stream-split');
 const merge           = require('mout/object/merge');
 
