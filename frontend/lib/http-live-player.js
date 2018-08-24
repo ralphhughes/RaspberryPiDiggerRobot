@@ -4501,6 +4501,10 @@ var WSAvcPlayer = new Class({
   },
 
   disconnect : function() {
+    // Added by RH:
+    const context = this.canvas.getContext('2d');
+    context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    
     this.ws.close();
   },
 
@@ -4514,6 +4518,10 @@ var WSAvcPlayer = new Class({
   stopStream : function() {
     this.ws.send("STOPSTREAM");
     log("Sent STOPSTREAM");
+    
+    // Added by RH:
+    const context = this.canvas.getContext('2d');
+    context.clearRect(0, 0, this.canvas.width, this.canvas.height);
   },
 });
 
