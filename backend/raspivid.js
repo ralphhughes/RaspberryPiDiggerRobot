@@ -16,8 +16,34 @@ class RpiServer extends Server {
       console.log("raspivid process exited with code ", code);
     });
 
-    return streamer.stdout;
+        streamer.stderr.on('data', (data) => {
+      if (data && (!(data instanceof String) || data.indexOf('frame=') === 0)) {
+        // ignoring messages like:
+        // frame= 3540 fps= 30 q=22.0 size=   43192kB time=00:01:58.00 bitrate=2998.6kbits/s dup=24 drop=0
+        return;
+      }
+      // console.log(`raspivid.js streamer.stderr data: ${data}`);
+      // console.log('raspivid.js streamer.stderr data:');
+      console.log(data);
+    });
+    streamer.stderr.on('error', (data) => {
+      console.log(`raspivid.js streamer.stderr error data: ${data}`);
+    });
+    streamer.on("close", function () {
+      console.log("raspivid.js close");
+    });
+    streamer.on("disconnect", function () {
+      console.log("raspivid.js disconnect");
+    });
+    streamer.on("error", function (code) {
+      console.log(`raspivid.js error code = ${code}`);
+    });
+    streamer.on("exit", function (code, signal) {
+      console.log(`raspivid.js exit code = ${code}, signal = ${signal}`);
+    });
+    return streamer;
   }
+  
 
 };
 

@@ -34,6 +34,7 @@ class _Server {
     this.streamer = this.get_feed();
     var readStream = this.streamer.stdout;
     this.readStream = readStream;
+    
     readStream = readStream.pipe(new Splitter(NALseparator));
     readStream.on("data", this.broadcast);
     readStream.on("close", function () {
