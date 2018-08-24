@@ -1,50 +1,57 @@
 "use strict";
 
 // Dependencies
-var GPIO = require('onoff').Gpio;
 var WebSocketServer = require('websocket').server;
 var http = require('http');
-var PiFastGpio = require('./pi-fast-gpio.js');
 var exec = require('child_process').exec;
 
+// Standardising on this gpio library instead of the other two.
 const Gpio = require('pigpio').Gpio;        // https://github.com/fivdi/pigpio
 
 // These ports should NOT be internet accessible!
 const WEBSOCKET_PORT = 1337;
-const PIGPIOD_PORT = 8888;
+// const PIGPIOD_PORT = 8888;
 
-const button = new Gpio(4, {
+
+// Easier configuring here than moving wires inside the bot
+const STEERING_SERVO = new Gpio(24, {mode: Gpio.OUTPUT});
+const STEERING_SERVO_MIN_PULSE=770;
+const STEERING_SERVO_MAX_PULSE=2250;
+
+const BUCKET_SERVO = new Gpio(25, {mode: Gpio.OUTPUT});
+const BUCKET_SERVO_MIN_PULSE=1000;
+const BUCKET_SERVO_MAX_PULSE=2000;
+
+const CAMERA_SERVO = new Gpio(-1, {mode: Gpio.OUTPUT});
+const CAMERA_SERVO_MIN_PULSE=1000;
+const CAMERA_SERVO_MAX_PULSE=2000;
+
+const ARM_MOTOR_PWM = new GPIO(26, {mode: Gpio.OUTPUT});
+const ARM_MOTOR_A = new GPIO(5, {mode: Gpio.OUTPUT});
+const ARM_MOTOR_B = new GPIO(6, {mode: Gpio.OUTPUT});
+
+const TRACTION_MOTOR_PWM = new Gpio(17, {mode: Gpio.OUTPUT});
+const TRACTION_MOTOR_A = new GPIO(27, {mode: Gpio.OUTPUT});
+const TRACTION_MOTOR_B = new GPIO(4, {mode: Gpio.OUTPUT});
+
+const ARM_LIMIT_SWITCH = new Gpio(-1, {
   mode: Gpio.INPUT,
   pullUpDown: Gpio.PUD_UP,
   alert: true
 });
 
-// Level must be stable for 10 ms before an alert event is emitted.
-button.glitchFilter(10000);
 
-button.on('alert', (level, tick) => {
+// Level must be stable for 10 ms before an alert event is emitted.
+ARM_LIMIT_SWITCH.glitchFilter(10000);
+
+ARM_LIMIT_SWITCH.on('alert', (level, tick) => {
   if (level === 0) {
-    console.log('Button event handler fired');
+    console.log('Switch: 0');
+  }
+  if (level === 1) {
+    console.log('Switch: 1');
   }
 });
-
-// Easier configuring here than moving wires inside the bot
-const STEERING_SERVO_PIN=24;
-const STEERING_SERVO_MIN_PULSE=770;
-const STEERING_SERVO_MAX_PULSE=2250;
-const BUCKET_SERVO_PIN=25;
-const BUCKET_SERVO_MIN_PULSE=1000;
-const BUCKET_SERVO_MAX_PULSE=2000;
-const CAMERA_SERVO_PIN=-1;
-const CAMERA_SERVO_MIN_PULSE=1000;
-const CAMERA_SERVO_MAX_PULSE=2000;
-const ARM_MOTOR_A_GPIO = new GPIO(5, 'out');
-const ARM_MOTOR_B_GPIO = new GPIO(6, 'out');
-const ARM_MOTOR_PWM_PIN = new GPIO(26,'out');
-const TRACTION_MOTOR_PWM_PIN = 17;
-const TRACTION_MOTOR_A_GPIO = new GPIO(27, 'out');
-const TRACTION_MOTOR_B_GPIO = new GPIO(4, 'out');
-const ARM_LIMIT_SWITCH_PIN=-1;
 
 
 
@@ -66,8 +73,6 @@ var wsServer = new WebSocketServer({
     // to accept it.
     autoAcceptConnections: false
 });
-
-var pigpio = new PiFastGpio();
 
 function originIsAllowed(origin) {
   // put logic here to detect whether the specified origin is allowed.
@@ -133,11 +138,6 @@ wsServer.on('request', function(request) {
 });
 
 function openConnection() {
-    console.log("Connecting to pigpiod daemon...");
-    pigpio.connect('::1', PIGPIOD_PORT, function(err) {
-        if (err) throw err;
-    });
-    ARM_MOTOR_PWM_PIN.writeSync(1);
     console.log("Starting streaming webcam...");
     execProcess("./start_webcam.sh");
     console.log("Done.");
@@ -148,8 +148,6 @@ function closeConnection() {
     executeCmd("t=0");
     executeCmd("a=0");
     
-    console.log("Disconnecting from pigpiod daemon...");
-    pigpio.close();
     
     console.log("Stopping streaming webcam to save power...");
     execProcess("./stop_webcam.sh");
@@ -182,55 +180,56 @@ function executeCmd(cmd) {
                 value = pwmDeadband(value);
                 switch (true) {
                     case value < 0:
-                        TRACTION_MOTOR_A_GPIO.writeSync(1);
-                        TRACTION_MOTOR_B_GPIO.writeSync(0);
+                        TRACTION_MOTOR_A.digitalWrite(1);
+                        TRACTION_MOTOR_B.digitalWrite(0);
                         break;
                     case value > 0:
-                        TRACTION_MOTOR_A_GPIO.writeSync(0);
-                        TRACTION_MOTOR_B_GPIO.writeSync(1);
+                        TRACTION_MOTOR_A.digitalWrite(0);
+                        TRACTION_MOTOR_B.digitalWrite(1);
                         break;
                     case value = 0:
                     default:
-                        TRACTION_MOTOR_A_GPIO.writeSync(1);
-                        TRACTION_MOTOR_B_GPIO.writeSync(1);
+                        TRACTION_MOTOR_A.digitalWrite(1);
+                        TRACTION_MOTOR_B.digitalWrite(1);
                         break;
                 }
                 var pwm = Math.abs(value);
-                pigpio.setPwmDutycycle(TRACTION_MOTOR_PWM_PIN, pwm);
+                TRACTION_MOTOR_PWM.pwmWrite(pwm);
                 break;
             case "a":
                 value = cropToRange(value,-255,255);
                 value = pwmDeadband(value);
                 switch (true) {
                     case value < 0:
-                        ARM_MOTOR_A_GPIO.writeSync(1);
-                        ARM_MOTOR_B_GPIO.writeSync(0);
+                        ARM_MOTOR_A.digitalWrite(1);
+                        ARM_MOTOR_B.digitalWrite(0);
                         break;
                     case value > 0:
-                        ARM_MOTOR_A_GPIO.writeSync(0);
-                        ARM_MOTOR_B_GPIO.writeSync(1);
+                        ARM_MOTOR_A.digitalWrite(0);
+                        ARM_MOTOR_B.digitalWrite(1);
                         break;
                     case value = 0:
                     default:
-                        ARM_MOTOR_A_GPIO.writeSync(1);
-                        ARM_MOTOR_B_GPIO.writeSync(1);
+                        ARM_MOTOR_A.digitalWrite(1);
+                        ARM_MOTOR_B.digitalWrite(1);
                         break;
                 }
+                ARM_MOTOR_PWM.digitalWrite(1);      // Always run at full speed
 		break;
 	    case "s":
                 value = cropToRange(value,0,1000);
                 var pw = STEERING_SERVO_MIN_PULSE + ((value / 1000) * (STEERING_SERVO_MAX_PULSE - STEERING_SERVO_MIN_PULSE));
-		pigpio.setServoPulsewidth(STEERING_SERVO_PIN, pw);		
+		STEERING_SERVO.servoWrite(pw);
 		break;
             case "b":
                 value = cropToRange(value,0,1000);
                 var pw = BUCKET_SERVO_MIN_PULSE + ((value / 1000) * (BUCKET_SERVO_MAX_PULSE - BUCKET_SERVO_MIN_PULSE));
-                pigpio.setServoPulsewidth(BUCKET_SERVO_PIN, pw);
+                BUCKET_SERVO.servoWrite(pw);
 		break;
             case "c":
                 value = cropToRange(value,0,1000);
                 var pw = CAMERA_SERVO_MIN_PULSE + ((value / 1000) * (CAMERA_SERVO_MAX_PULSE - CAMERA_SERVO_MIN_PULSE));
-                pigpio.setServoPulsewidth(CAMERA_SERVO_PIN, pw);
+                CAMERA_SERVO.servoWrite(pw);
 		break;
 	}
 	    
