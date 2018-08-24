@@ -14,7 +14,7 @@ var VIEWPORT_HEIGHT = 540;
 // Defaults
 var tractionMotor = 0;      // [-255, 255]  // Default stopped, uses PWM
 var armMotor = 0;           // [-255, 255]  // Default stopped, no PWM
-var steeringServo = 500;    // [0,1000]     // Default straight ahead
+var steeringServo = 500;    // [0, 1000]    // Default straight ahead
 var bucketServo = 500;      // [0, 1000]    // Default half way between bucket up and down
 var cameraServo = 500;      // [0, 1000]    // Default straight ahead relative to bucket end
 
@@ -158,4 +158,19 @@ function updateUI() {
     
     var valueForGauge3 = Math.round(100 * (bucketServo-500)/500);
     bucketServoGauge.value = valueForGauge3;
+    
+    var upIcon = document.getElementById('upIcon');
+    var downIcon = document.getElementById('downIcon');
+    if (armMotor > 0) {
+        upIcon.style.display="block";
+        downIcon.style.display="none";
+    }
+    if (armMotor == 0) {
+        upIcon.style.display="none";
+        downIcon.style.display="none";
+    }
+    if (armMotor < 0) {
+        upIcon.style.display="none";
+        downIcon.style.display="block";
+    }
 }

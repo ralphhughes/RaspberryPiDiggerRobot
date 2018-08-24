@@ -2,15 +2,31 @@
     position: relative;
     margin-left: auto;
     margin-right: auto;
-    width: 480px;
-    height: 640px;
 }
 #mainImg {
     position: absolute;
     top: 0px;
     left: 0px;
-    width: 480px;
-    height: 640px;
     border: 1px solid #000000;
-    border-radius: 5px;
+    border-radius: 6px;
+}
+.topLeft {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+.topRight {
+    position: absolute;
+    top : 0px;
+    left: 0px;
+}
+.bottomLeft {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+}
+.bottomRight {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
 }

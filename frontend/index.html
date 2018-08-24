@@ -27,12 +27,14 @@
         <div id="container" oncontextmenu="return false;">
             <img src="images/test_pattern.png" alt="Video Feed" id="mainImg"/>
         </div>
-        <span id="debug"></span>
+        <canvas id="gauge1" class="topLeft"></canvas>
+        <canvas id="gauge2" class="bottomLeft"></canvas>
+        <canvas id="gauge3" class="topRight"></canvas>
+        <img id="upIcon" src="images/icons8-up-40.png" class="bottomRight" style="display: none;" alt="Up"/>
+        <img id="downIcon" src="images/icons8-down-40.png" class="bottomRight" style="display: none;" alt="Down"/>
         <hr/>
-        <h5>Unfinished status overlays</h5>
-        <canvas id="gauge1"></canvas>
-        <canvas id="gauge2"></canvas>
-        <canvas id="gauge3"></canvas>
+        
+        
         <br/>
         Latency: <span id="ping">--</span> ms<br/>
         CPU Temp: <span id="temp">--</span>&#176;C<br/>
