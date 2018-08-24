@@ -1,6 +1,6 @@
 "use strict";
 
-// Dependencies
+// <DEPENDENCIES>
 var WebSocketServer = require('websocket').server;
 var http = require('http');
 var exec = require('child_process').exec;
@@ -8,41 +8,46 @@ var exec = require('child_process').exec;
 // Standardising on this gpio library instead of the other two.
 const Gpio = require('pigpio').Gpio;        // https://github.com/fivdi/pigpio
 
+// </DEPENDENCIES>
+
+
+// <CONFIG>
 // These ports should NOT be internet accessible!
 const WEBSOCKET_PORT = 1337;
-// const PIGPIOD_PORT = 8888;
 
 
 // Easier configuring here than moving wires inside the bot
 const STEERING_SERVO = new Gpio(24, {mode: Gpio.OUTPUT});
-const STEERING_SERVO_MIN_PULSE=770;
+const STEERING_SERVO_MIN_PULSE=770; // Steering servo has been tested and these are the max physical servo limits
 const STEERING_SERVO_MAX_PULSE=2250;
 
 const BUCKET_SERVO = new Gpio(25, {mode: Gpio.OUTPUT});
 const BUCKET_SERVO_MIN_PULSE=1000;
 const BUCKET_SERVO_MAX_PULSE=2000;
 
-const CAMERA_SERVO = new Gpio(-1, {mode: Gpio.OUTPUT});
+const CAMERA_SERVO = new Gpio(1, {mode: Gpio.OUTPUT});
 const CAMERA_SERVO_MIN_PULSE=1000;
 const CAMERA_SERVO_MAX_PULSE=2000;
 
 const ARM_MOTOR_PWM = new GPIO(26, {mode: Gpio.OUTPUT});
-const ARM_MOTOR_A = new GPIO(5, {mode: Gpio.OUTPUT});
-const ARM_MOTOR_B = new GPIO(6, {mode: Gpio.OUTPUT});
+const ARM_MOTOR_A   = new GPIO(5, {mode: Gpio.OUTPUT});
+const ARM_MOTOR_B   = new GPIO(6, {mode: Gpio.OUTPUT});
 
-const TRACTION_MOTOR_PWM = new Gpio(17, {mode: Gpio.OUTPUT});
-const TRACTION_MOTOR_A = new GPIO(27, {mode: Gpio.OUTPUT});
-const TRACTION_MOTOR_B = new GPIO(4, {mode: Gpio.OUTPUT});
+const TRACTION_MOTOR_PWM =  new Gpio(17, {mode: Gpio.OUTPUT});
+const TRACTION_MOTOR_A =    new GPIO(27, {mode: Gpio.OUTPUT});
+const TRACTION_MOTOR_B =    new GPIO(4, {mode: Gpio.OUTPUT});
 
-const ARM_LIMIT_SWITCH = new Gpio(-1, {
+const ARM_LIMIT_SWITCH = new Gpio(2, {
   mode: Gpio.INPUT,
   pullUpDown: Gpio.PUD_UP,
   alert: true
 });
 
-
 // Level must be stable for 10 ms before an alert event is emitted.
 ARM_LIMIT_SWITCH.glitchFilter(10000);
+
+// </CONFIG>
+
 
 ARM_LIMIT_SWITCH.on('alert', (level, tick) => {
   if (level === 0) {
