@@ -29,13 +29,13 @@ const CAMERA_SERVO = new Gpio(1, {mode: Gpio.OUTPUT});
 const CAMERA_SERVO_MIN_PULSE=1000;
 const CAMERA_SERVO_MAX_PULSE=2000;
 
-const ARM_MOTOR_PWM = new GPIO(26, {mode: Gpio.OUTPUT});
-const ARM_MOTOR_A   = new GPIO(5, {mode: Gpio.OUTPUT});
-const ARM_MOTOR_B   = new GPIO(6, {mode: Gpio.OUTPUT});
+const ARM_MOTOR_PWM = new Gpio(26, {mode: Gpio.OUTPUT});
+const ARM_MOTOR_A   = new Gpio(5, {mode: Gpio.OUTPUT});
+const ARM_MOTOR_B   = new Gpio(6, {mode: Gpio.OUTPUT});
 
 const TRACTION_MOTOR_PWM =  new Gpio(17, {mode: Gpio.OUTPUT});
-const TRACTION_MOTOR_A =    new GPIO(27, {mode: Gpio.OUTPUT});
-const TRACTION_MOTOR_B =    new GPIO(4, {mode: Gpio.OUTPUT});
+const TRACTION_MOTOR_A =    new Gpio(27, {mode: Gpio.OUTPUT});
+const TRACTION_MOTOR_B =    new Gpio(4, {mode: Gpio.OUTPUT});
 
 const ARM_LIMIT_SWITCH = new Gpio(2, {
   mode: Gpio.INPUT,
