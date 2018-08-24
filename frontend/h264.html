@@ -8,21 +8,24 @@
         <!-- provide WSAvcPlayer -->
         <script type="text/javascript" src="lib/http-live-player.js"></script>
         <script type="text/javascript">
-            function onload() {
+            function connect() {
                 var canvas = document.getElementById('cam');
-                // Create h264 player
+                
+                // Work out the web socket URL since this page is on a dynamic URL
                 var uri = (location.protocol.match(/^https/) ? "wss" : "ws") + "://" + location.hostname+(location.port ? ':'+location.port: '') + "/h264-streamer";
+                
+                // Create h264 player
                 var wsavc = new WSAvcPlayer(canvas, "webgl", 1, 35);
                 wsavc.connect(uri);
 
 
-                //expose instance for button callbacks
+                //expose instance for subsequent button callbacks
                 window.wsavc = wsavc;
             }
         </script>
     </head>
     <body onload="onload()">
-
+        <button type="button" onclick="connect()">Connect</button>
         <button type="button" onclick="wsavc.playStream()">Start Video</button>
         <button type="button" onclick="wsavc.stopStream()">Stop Video</button>
         <button type="button" onclick="wsavc.disconnect()">Disconnect</button>
