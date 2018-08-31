@@ -174,3 +174,92 @@ function updateUI() {
         downIcon.style.display="block";
     }
 }
+
+function initUI() {
+    // Configure the JS gauges
+    tractionMotorGauge = new RadialGauge({
+        renderTo: 'gauge1',
+        width: 150,
+        height: 150,
+        colorPlate: 'rgba(0,0,0,0)',
+        minValue: '0',
+        maxValue: '100',
+        value: '0',
+        borders: false,
+        valueBox: false,
+        majorTicks: ['0', '10', '20', '30', '40', '50', '60', '70', '80', '90', '100'],
+        animation: false
+    });
+    tractionMotorGauge.draw();
+
+    steeringServoGauge = new RadialGauge({
+        renderTo: 'gauge2',
+        width: 150,
+        height: 150,
+        colorPlate: 'rgba(0,0,0,0)',
+        minValue: '-100',
+        maxValue: '100',
+        value: '0',
+        borders: false,
+        valueBox: false,
+        majorTicks: ['-100', '-80', '-60', '-40', '-20', '0', '20', '40', '60', '80', '100'],
+        startAngle: 90,
+        ticksAngle: 180,
+        borderShadowWidth: 0,
+        needleType: "arrow",
+        needleWidth: 2,
+        needleCircleSize: 7,
+        needleCircleOuter: true,
+        needleCircleInner: false,
+        animation: false
+    });
+    steeringServoGauge.draw();
+
+    bucketServoGauge = new RadialGauge({
+        renderTo: 'gauge3',
+        width: 150,
+        height: 150,
+        colorPlate: 'rgba(0,0,0,0)',
+        minValue: '-100',
+        maxValue: '100',
+        value: '0',
+        borders: false,
+        valueBox: false,
+        majorTicks: ['-100', '-80', '-60', '-40', '-20', '0', '20', '40', '60', '80', '100'],
+        startAngle: 0,
+        ticksAngle: 180,
+        borderShadowWidth: 0,
+        needleType: "arrow",
+        needleWidth: 2,
+        needleCircleSize: 7,
+        needleCircleOuter: true,
+        needleCircleInner: false,
+        animation: false
+    });
+    bucketServoGauge.draw();
+
+    var intervalId = setInterval(updateUI, 150);
+
+    // Setup event handlers for help div
+    var modal = document.getElementById('modalHelpDiv');
+    var btn = document.getElementById("btnHelp");
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks the button, open the modal 
+    btn.onclick = function() {
+        modal.style.display = "block";
+    };
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        modal.style.display = "none";
+    };
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    };
+
+}

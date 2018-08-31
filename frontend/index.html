@@ -15,7 +15,24 @@
         <script src="js/mobile_events.js"></script>
         <script src="js/mouse_events.js"></script>
         <script src="js/keyboard_events.js"></script>
+        <script type="text/javascript" src="lib/http-live-player.js"></script>
+        
+        <script type="text/javascript">
+            function connect() {
+                var canvas = document.getElementById('cam');
+                
+                // Work out the web socket URL since this page is on a dynamic URL
+                var uri = (location.protocol.match(/^https/) ? "wss" : "ws") + "://" + location.hostname+(location.port ? ':'+location.port: '') + "/h264-streamer";
+                
+                // Create h264 player
+                var wsavc = new WSAvcPlayer(canvas, "webgl", 1, 35);
+                wsavc.connect(uri);
 
+
+                //expose instance for subsequent button callbacks
+                window.wsavc = wsavc;
+            }
+        </script>
         <script>
             $(document).ready(function () {
                 var isMobile = window.matchMedia("only screen and (max-width: 760px)");
@@ -29,96 +46,8 @@
                     addKeyboardHandlers();
                 }
 
-                // Configure the JS gauges
-                tractionMotorGauge = new RadialGauge({
-                    renderTo: 'gauge1',
-                    width: 150,
-                    height: 150,
-                    colorPlate: 'rgba(0,0,0,0)',
-                    minValue: '0',
-                    maxValue: '100',
-                    value: '0',
-                    borders: false,
-                    valueBox: false,
-                    majorTicks: ['0', '10', '20', '30', '40', '50', '60', '70', '80', '90', '100'],
-                    animation: false
-                });
-                tractionMotorGauge.draw();
+                initUI();
 
-                steeringServoGauge = new RadialGauge({
-                    renderTo: 'gauge2',
-                    width: 150,
-                    height: 150,
-                    colorPlate: 'rgba(0,0,0,0)',
-                    minValue: '-100',
-                    maxValue: '100',
-                    value: '0',
-                    borders: false,
-                    valueBox: false,
-                    majorTicks: ['-100', '-80', '-60', '-40', '-20', '0', '20', '40', '60', '80', '100'],
-                    startAngle: 90,
-                    ticksAngle: 180,
-                    borderShadowWidth: 0,
-                    needleType: "arrow",
-                    needleWidth: 2,
-                    needleCircleSize: 7,
-                    needleCircleOuter: true,
-                    needleCircleInner: false,
-                    animation: false
-                });
-                steeringServoGauge.draw();
-
-                bucketServoGauge = new RadialGauge({
-                    renderTo: 'gauge3',
-                    width: 150,
-                    height: 150,
-                    colorPlate: 'rgba(0,0,0,0)',
-                    minValue: '-100',
-                    maxValue: '100',
-                    value: '0',
-                    borders: false,
-                    valueBox: false,
-                    majorTicks: ['-100', '-80', '-60', '-40', '-20', '0', '20', '40', '60', '80', '100'],
-                    startAngle: 0,
-                    ticksAngle: 180,
-                    borderShadowWidth: 0,
-                    needleType: "arrow",
-                    needleWidth: 2,
-                    needleCircleSize: 7,
-                    needleCircleOuter: true,
-                    needleCircleInner: false,
-                    animation: false
-                });
-                bucketServoGauge.draw();
-
-                var intervalId = setInterval(updateUI, 150);
-
-
-                // Get the modal
-var modal = document.getElementById('myModal');
-
-// Get the button that opens the modal
-var btn = document.getElementById("myBtn");
-
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
-
-// When the user clicks the button, open the modal 
-btn.onclick = function() {
-    modal.style.display = "block";
-};
-
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-    modal.style.display = "none";
-};
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-};
             });
         </script>
     </head>
@@ -139,8 +68,13 @@ window.onclick = function(event) {
 
         <h5>Debug</h5>
         <form>
-            <input id="connect" type="button" value="Connect" />&nbsp;
+            <input id="connect" type="button" value="Connect to command websocket" />&nbsp;
             <input id="text" />&nbsp;<input id="send" type="button" value="Send" /><br />
+            <button type="button" onclick="connect()">Connect to h264 websocket</button>
+            <button type="button" onclick="wsavc.playStream()">Start Video</button>
+            <button type="button" onclick="wsavc.stopStream()">Stop Video</button>
+            <button type="button" onclick="wsavc.disconnect()">Disconnect</button>
+
         </form>
         <span id="message"></span>
         <br/>
@@ -151,10 +85,10 @@ window.onclick = function(event) {
         <hr/>
 
 
-        <button id="myBtn">Open Modal</button>
+        <button id="btnHelp">Instructions \ Help</button>
 
-        <!-- The Modal -->
-        <div id="myModal" class="modal">
+
+        <div id="modalHelpDiv" class="modal">
 
             <!-- Modal content -->
             <div class="modal-content centerScreen">
