@@ -18,24 +18,27 @@
         
     </head>
     <body>
-        <form>
-            <input id="connect" type="button" value="Connect" />&nbsp;
-            <input id="text" />&nbsp;<input id="send" type="button" value="Send" /><br />
-        </form>
-        <span id="message"></span>
+        
 
         <div id="container" oncontextmenu="return false;">
-            <img src="images/test_pattern.png" alt="Video Feed" id="mainImg"/>
+            <!-- <img src="images/test_pattern.png" alt="Video Feed" id="mainImg"/> -->
+            <canvas id="cam" style="width:100%; height:75vw;"></canvas>
         </div>
         <canvas id="gauge1" class="topRight"></canvas>
         <canvas id="gauge2" class="bottomLeft"></canvas>
         <canvas id="gauge3" class="topLeft"></canvas>
         <img id="upIcon" src="images/icons8-up-40.png" class="bottomRight" style="display: none;" alt="Up"/>
         <img id="downIcon" src="images/icons8-down-40.png" class="bottomRight" style="display: none;" alt="Down"/>
+
         <hr/>
-        
-        
+        <h5>Debug</h5>
+        <form>
+            <input id="connect" type="button" value="Connect" />&nbsp;
+            <input id="text" />&nbsp;<input id="send" type="button" value="Send" /><br />
+        </form>
+        <span id="message"></span>
         <br/>
+        
         Latency: <span id="ping">--</span> ms<br/>
         CPU Temp: <span id="temp">--</span>&#176;C<br/>
         Current Drain: <span id="current">--</span> mA<br/>
