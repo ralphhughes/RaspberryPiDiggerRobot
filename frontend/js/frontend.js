@@ -262,4 +262,19 @@ function initUI() {
         }
     };
 
+    function connect() {
+        var canvas = document.getElementById('mainImg');
+
+        // Work out the web socket URL since this page is on a dynamic URL
+        var uri = (location.protocol.match(/^https/) ? "wss" : "ws") + "://" + location.hostname+(location.port ? ':'+location.port: '') + "/h264-streamer";
+
+        // Create h264 player
+        var wsavc = new WSAvcPlayer(canvas, "webgl", 1, 35);
+        wsavc.connect(uri);
+
+
+        //expose instance for subsequent button callbacks
+        window.wsavc = wsavc;
+    }
+
 }

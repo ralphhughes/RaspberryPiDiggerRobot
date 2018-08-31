@@ -18,20 +18,6 @@
         <script type="text/javascript" src="lib/http-live-player.js"></script>
         
         <script type="text/javascript">
-            function connect() {
-                var canvas = document.getElementById('cam');
-                
-                // Work out the web socket URL since this page is on a dynamic URL
-                var uri = (location.protocol.match(/^https/) ? "wss" : "ws") + "://" + location.hostname+(location.port ? ':'+location.port: '') + "/h264-streamer";
-                
-                // Create h264 player
-                var wsavc = new WSAvcPlayer(canvas, "webgl", 1, 35);
-                wsavc.connect(uri);
-
-
-                //expose instance for subsequent button callbacks
-                window.wsavc = wsavc;
-            }
         </script>
         <script>
             $(document).ready(function () {
@@ -79,9 +65,12 @@
         <span id="message"></span>
         <br/>
 
+        Uptime: <span id="uptime">--</span> days<br/>
         Latency: <span id="ping">--</span> ms<br/>
         CPU Temp: <span id="temp">--</span>&#176;C<br/>
+        Input Voltage: <span id="voltage">--</span> V<br/>
         Current Drain: <span id="current">--</span> mA<br/>
+        Input Power: <span id="power">--</span> W<br/>
         <hr/>
 
 
