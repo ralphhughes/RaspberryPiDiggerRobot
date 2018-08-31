@@ -9,52 +9,15 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="lib/jquery.mousewheel.min.js"></script>
         <script src="lib/gauge.min.js"></script>
-        
+
         <link rel="stylesheet" href="css/styles.css">
         <script src="js/frontend.js"></script>
         <script src="js/mobile_events.js"></script>
         <script src="js/mouse_events.js"></script>
         <script src="js/keyboard_events.js"></script>
-        
-    </head>
-    <body>
-        
 
-        <div id="container" oncontextmenu="return false;">
-            <!-- <img src="images/test_pattern.png" alt="Video Feed" id="mainImg"/> -->
-            <canvas id="cam" style="width:100%; height:75vw;"></canvas>
-        </div>
-        <canvas id="gauge1" class="topRight"></canvas>
-        <canvas id="gauge2" class="bottomLeft"></canvas>
-        <canvas id="gauge3" class="topLeft"></canvas>
-        <img id="upIcon" src="images/icons8-up-40.png" class="bottomRight" style="display: none;" alt="Up"/>
-        <img id="downIcon" src="images/icons8-down-40.png" class="bottomRight" style="display: none;" alt="Down"/>
-
-        <hr/>
-        <h5>Debug</h5>
-        <form>
-            <input id="connect" type="button" value="Connect" />&nbsp;
-            <input id="text" />&nbsp;<input id="send" type="button" value="Send" /><br />
-        </form>
-        <span id="message"></span>
-        <br/>
-        
-        Latency: <span id="ping">--</span> ms<br/>
-        CPU Temp: <span id="temp">--</span>&#176;C<br/>
-        Current Drain: <span id="current">--</span> mA<br/>
-        <hr/>
-        <h5>Help \ Controls</h5>
-        <ul>
-            <li><img src="images/icons8-keyboard-40.png" alt="W,A,S,D"/> W,A,S,D - Controls forwards, backwards and steering of the robot</li>
-            <li><img src="images/icons8-cursor-40.png" alt="Move mouse"/> - Controls direction camera on robot faces</li>
-            <li><img src="images/icons8-left-click-40.png" alt="Left click"/> - Move digger arm up</li>
-            <li><img src="images/icons8-mouse-right-click-40.png" alt="Right click"/> - Move digger arm down</li>
-            <li><img src="images/icons8-mouse-scrolling-40.png" alt="Scrollwheel"/> - Tilt bucket with scrollwheel</li>
-            <li><img src="images/icons8-esc-40.png" alt="Esc or spacebar"/>[Esc] or [Spacebar] - Stop</li>
-        </ul>
-        
         <script>
-            $( document ).ready(function() {      
+            $(document).ready(function () {
                 var isMobile = window.matchMedia("only screen and (max-width: 760px)");
                 if (isMobile.matches) {
                     console.log("Detected mobile device");
@@ -65,7 +28,7 @@
                     addMouseHandlers();
                     addKeyboardHandlers();
                 }
-                
+
                 // Configure the JS gauges
                 tractionMotorGauge = new RadialGauge({
                     renderTo: 'gauge1',
@@ -77,7 +40,7 @@
                     value: '0',
                     borders: false,
                     valueBox: false,
-                    majorTicks: ['0','10','20','30','40','50','60','70','80','90','100'],
+                    majorTicks: ['0', '10', '20', '30', '40', '50', '60', '70', '80', '90', '100'],
                     animation: false
                 });
                 tractionMotorGauge.draw();
@@ -92,7 +55,7 @@
                     value: '0',
                     borders: false,
                     valueBox: false,
-                    majorTicks: ['-100','-80','-60','-40','-20','0','20','40','60','80','100'],
+                    majorTicks: ['-100', '-80', '-60', '-40', '-20', '0', '20', '40', '60', '80', '100'],
                     startAngle: 90,
                     ticksAngle: 180,
                     borderShadowWidth: 0,
@@ -115,7 +78,7 @@
                     value: '0',
                     borders: false,
                     valueBox: false,
-                    majorTicks: ['-100','-80','-60','-40','-20','0','20','40','60','80','100'],
+                    majorTicks: ['-100', '-80', '-60', '-40', '-20', '0', '20', '40', '60', '80', '100'],
                     startAngle: 0,
                     ticksAngle: 180,
                     borderShadowWidth: 0,
@@ -130,7 +93,84 @@
 
                 var intervalId = setInterval(updateUI, 150);
 
-             });
+
+                // Get the modal
+var modal = document.getElementById('myModal');
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal 
+btn.onclick = function() {
+    modal.style.display = "block";
+};
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+    modal.style.display = "none";
+};
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+};
+            });
         </script>
+    </head>
+    <body>
+
+
+        <div id="container" oncontextmenu="return false;">
+            <!-- <img src="images/test_pattern.png" alt="Video Feed" id="mainImg"/> -->
+            <canvas id="mainImg"></canvas>
+        </div>
+        <canvas id="gauge1" class="topRight"></canvas>
+        <canvas id="gauge2" class="bottomLeft"></canvas>
+        <canvas id="gauge3" class="topLeft"></canvas>
+        <img id="upIcon" src="images/icons8-up-40.png" class="bottomRight" style="display: none;" alt="Up"/>
+        <img id="downIcon" src="images/icons8-down-40.png" class="bottomRight" style="display: none;" alt="Down"/>
+
+        <hr/>
+
+        <h5>Debug</h5>
+        <form>
+            <input id="connect" type="button" value="Connect" />&nbsp;
+            <input id="text" />&nbsp;<input id="send" type="button" value="Send" /><br />
+        </form>
+        <span id="message"></span>
+        <br/>
+
+        Latency: <span id="ping">--</span> ms<br/>
+        CPU Temp: <span id="temp">--</span>&#176;C<br/>
+        Current Drain: <span id="current">--</span> mA<br/>
+        <hr/>
+
+
+        <button id="myBtn">Open Modal</button>
+
+        <!-- The Modal -->
+        <div id="myModal" class="modal">
+
+            <!-- Modal content -->
+            <div class="modal-content centerScreen">
+                <span class="close">&times;</span>
+                <h5>Help \ Controls</h5>
+                <ul>
+                    <li><img src="images/icons8-keyboard-40.png" alt="W,A,S,D"/> W,A,S,D - Controls forwards, backwards and steering of the robot</li>
+                    <li><img src="images/icons8-cursor-40.png" alt="Move mouse"/> - Controls direction camera on robot faces</li>
+                    <li><img src="images/icons8-left-click-40.png" alt="Left click"/> - Move digger arm up</li>
+                    <li><img src="images/icons8-mouse-right-click-40.png" alt="Right click"/> - Move digger arm down</li>
+                    <li><img src="images/icons8-mouse-scrolling-40.png" alt="Scrollwheel"/> - Tilt bucket with scrollwheel</li>
+                    <li><img src="images/icons8-esc-40.png" alt="Esc or spacebar"/>[Esc] or [Spacebar] - Stop</li>
+                </ul>
+            </div>
+
+        </div>    
+        
     </body>
 </html>
