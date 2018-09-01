@@ -35,16 +35,19 @@
                 initUI();
 
             });
-function stream_connect() {
- var canvas = document.getElementById('mainImg'); 
-// Work out the web socket URL since this page is on a dynamic URL 
-var uri = (location.protocol.match(/^https/) ? "wss" : "ws") + "://" + location.hostname+(location.port ? ':'+location.port: '') + "/h264-streamer"; 
-// Create h264 player 
-var wsavc = new WSAvcPlayer(canvas, "webgl", 1, 35); 
-wsavc.connect(uri); 
-//expose instance for subsequent button callbacks 
-window.wsavc = wsavc;
- }
+            function stream_connect() {
+		var canvas = document.getElementById('mainImg'); 
+
+		// Work out the web socket URL since this page is on a dynamic URL 
+		var uri = (location.protocol.match(/^https/) ? "wss" : "ws") + "://" + location.hostname+(location.port ? ':'+location.port: '') + "/h264-streamer"; 
+
+		// Create h264 player 
+		var wsavc = new WSAvcPlayer(canvas, "webgl", 1, 35); 
+		wsavc.connect(uri); 
+
+		//expose instance for subsequent button callbacks 
+		window.wsavc = wsavc;
+            }
 
         </script>
     </head>
@@ -75,13 +78,15 @@ window.wsavc = wsavc;
         </form>
         <span id="message"></span>
         <br/>
-
-        Uptime: <span id="uptime">--</span> days<br/>
-        Latency: <span id="ping">--</span> ms<br/>
-        CPU Temp: <span id="temp">--</span>&#176;C<br/>
-        Input Voltage: <span id="voltage">--</span> V<br/>
-        Current Drain: <span id="current">--</span> mA<br/>
-        Input Power: <span id="power">--</span> W<br/>
+	<table>
+            <tr><td>Uptime:</td><td><span id="uptime">--</span> days</td></tr>
+            <tr><td>Command Latency:</td><td><span id="ping">--</span> ms</td></tr>
+            <tr><td>CPU Temp:</td><td><span id="temp">--</span>&#176;C</td></tr>
+            <tr><td>Load Avg:</td><td><span id="load">--</span></td></tr>
+            <tr><td>Input Voltage:</td><td><span id="voltage">--</span> V</td></tr>
+            <tr><td>Current Drain:</td><td><span id="current">--</span> mA</td></tr>
+            <tr><td>Input Power:</td><td><span id="power">--</span> W</td></tr>
+	</table>
         <hr/>
 
 
