@@ -35,6 +35,17 @@
                 initUI();
 
             });
+function stream_connect() {
+ var canvas = document.getElementById('mainImg'); 
+// Work out the web socket URL since this page is on a dynamic URL 
+var uri = (location.protocol.match(/^https/) ? "wss" : "ws") + "://" + location.hostname+(location.port ? ':'+location.port: '') + "/h264-streamer"; 
+// Create h264 player 
+var wsavc = new WSAvcPlayer(canvas, "webgl", 1, 35); 
+wsavc.connect(uri); 
+//expose instance for subsequent button callbacks 
+window.wsavc = wsavc;
+ }
+
         </script>
     </head>
     <body>
@@ -56,7 +67,7 @@
         <form>
             <input id="connect" type="button" value="Connect to command websocket" />&nbsp;
             <input id="text" />&nbsp;<input id="send" type="button" value="Send" /><br />
-            <button type="button" onclick="connect()">Connect to h264 websocket</button>
+            <button type="button" onclick="stream_connect()">Connect to h264 websocket</button>
             <button type="button" onclick="wsavc.playStream()">Start Video</button>
             <button type="button" onclick="wsavc.stopStream()">Stop Video</button>
             <button type="button" onclick="wsavc.disconnect()">Disconnect</button>
