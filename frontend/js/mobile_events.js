@@ -18,14 +18,14 @@ function addTouchEvents() {
                 tractionMotor = setDeadband(tractionMotor, 50);
                 tractionMotor = cropToRange(tractionMotor, -255, 255);
                 sendMessage("t=" + tractionMotor);
-                
+
                 steeringServo = pos.x * 1000;
                 steeringServo = cropToRange(steeringServo, 0, 1000);
                 sendMessage("s=" + steeringServo);
             },
             endEvent: function (pos) {
                 sendMessage("t=0");
-                
+
                 steeringServo = pos.x * 1000;
                 steeringServo = cropToRange(steeringServo, 0, 1000);
                 sendMessage("s=" + steeringServo);
@@ -40,7 +40,7 @@ function addTouchEvents() {
             }
         });
 
-        // Default positions                                                                                                                      
+        // Default position is centred for both joysticks
         $('#stick1').joystick('value', 0.5, 0.5);
         $('#stick2').joystick('value', 0.5, 0.5);
 

@@ -22,7 +22,7 @@
 
         <script>
             $(document).ready(function () {
-                // WASD or arrow keys for vehicle movement?
+                // WASD or arrow keys for vehicle movement
                 addKeyboardHandlers();
 
                 // Mouse buttons for arm raise\lower, scroll wheel for bucket tilt
@@ -53,26 +53,24 @@
     </head>
     <body>
 
+        <div id="container" oncontextmenu="return false;">
+            <canvas id="mainImg"></canvas>
+        </div>
+        
         <canvas id="gauge3" class="topLeft"></canvas>
         <canvas id="gauge1" class="topRight"></canvas>
+        <canvas id="gauge2" class="bottomLeft"></canvas>
+        <img id="upIcon" src="images/icons8-up-40.png" class="bottomRight" style="display: none;" alt="Up"/>
+        <img id="downIcon" src="images/icons8-down-40.png" class="bottomRight" style="display: none;" alt="Down"/>
 
         <div class="joystick middleLeft" id="stick1">
             <div class="handle"></div>
         </div>
-
-        <div id="container" oncontextmenu="return false;">
-            <canvas id="mainImg"></canvas>
-        </div>
-
         <div class="joystick middleRight" id="stick2">
             <div class="handle"></div>
         </div>
         
-        <canvas id="gauge2" class="bottomLeft"></canvas>
         
-        <img id="upIcon" src="images/icons8-up-40.png" class="bottomRight" style="display: none;" alt="Up"/>
-        <img id="downIcon" src="images/icons8-down-40.png" class="bottomRight" style="display: none;" alt="Down"/>
-
         <hr/>
 
         <h5>Debug</h5>
@@ -107,7 +105,8 @@
             <!-- Modal content -->
             <div class="modal-content centerScreen">
                 <span class="close">&times;</span>
-                <h5>Help \ Controls</h5>
+                <h4>Help \ Controls</h4>
+                <h5>For desktop &amp; laptop users:</h5>
                 <ul>
                     <li><img src="images/icons8-keyboard-40.png" alt="W,A,S,D"/> W,A,S,D - Controls forwards, backwards and steering of the robot</li>
                     <li><img src="images/icons8-cursor-40.png" alt="Move mouse"/> - Controls direction camera on robot faces</li>
@@ -115,6 +114,12 @@
                     <li><img src="images/icons8-mouse-right-click-40.png" alt="Right click"/> - Move digger arm down</li>
                     <li><img src="images/icons8-mouse-scrolling-40.png" alt="Scrollwheel"/> - Tilt bucket with scrollwheel</li>
                     <li><img src="images/icons8-esc-40.png" alt="Esc or spacebar"/>[Esc] or [Spacebar] - Stop</li>
+                </ul>
+                <h5>For mobile &amp; tablet users:</h5>
+                <ul>
+                    <li>Left on-screen thumbstick - Forwards, backwards &amp; steering</li>
+                    <li>Right on-screen thumbstick Y - Digger arm up down</li>
+                    <li>Right on-screen thumbstick X - Bucket tilt</li>
                 </ul>
             </div>
 
