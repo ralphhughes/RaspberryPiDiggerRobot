@@ -51,6 +51,7 @@
 
 /* from mifi/jquery-joystick */
 .joystick {
+    display: none;  /* Hidden by default, shown by JS */
     width: 130px;
     height: 130px;
     background-color: #eee;
