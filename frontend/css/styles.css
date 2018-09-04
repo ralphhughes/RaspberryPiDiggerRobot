@@ -20,6 +20,18 @@
     top : 0px;
     left: 0px;
 }
+.middleLeft {
+    position: absolute;
+    left: 0px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.middleRight {
+    position: absolute;
+    right: 0px;
+    top: 50%;
+    transform: translateY(-50%);
+}
 .bottomLeft {
     position: absolute;
     bottom: 0px;
@@ -36,6 +48,23 @@
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
 }
+
+/* from mifi/jquery-joystick */
+.joystick {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    background-color: #eee;
+}
+.joystick .handle {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    background-color: rgb(201, 44, 44);
+    border: 1px solid rgb(107, 35, 35);
+    border-radius: 5px;
+}
+
 
 /* from w3schools modal box */
 /* The Modal (background) */

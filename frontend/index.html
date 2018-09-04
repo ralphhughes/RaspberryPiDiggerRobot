@@ -4,63 +4,72 @@
         <meta charset="UTF-8">
         <title>DiggerRobot</title>
         <meta name="author" content="Ralph Hughes">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script> -->
         <script src="lib/jquery.mousewheel.min.js"></script>
+        <script src="lib/jquery.joystick.js"></script>
         <script src="lib/gauge.min.js"></script>
+        <script src="lib/http-live-player.js"></script>
 
         <link rel="stylesheet" href="css/styles.css">
         <script src="js/frontend.js"></script>
         <script src="js/mobile_events.js"></script>
         <script src="js/mouse_events.js"></script>
         <script src="js/keyboard_events.js"></script>
-        <script type="text/javascript" src="lib/http-live-player.js"></script>
-        
-        <script type="text/javascript">
-        </script>
+
         <script>
             $(document).ready(function () {
-                var isMobile = window.matchMedia("only screen and (max-width: 760px)");
-                if (isMobile.matches) {
-                    console.log("Detected mobile device");
-                    addTouchEvents();
-                    addTiltEvents();
-                } else {
-                    console.log("Detected desktop or laptop PC");
-                    addMouseHandlers();
-                    addKeyboardHandlers();
-                }
+                // WASD or arrow keys for vehicle movement?
+                addKeyboardHandlers();
 
+                // Mouse buttons for arm raise\lower, scroll wheel for bucket tilt
+                addMouseHandlers();
+
+                // Twin virtual thumbsticks, one on each side of the video feed. Left one for vehicle movement, right one for arm\bucket
+                addTouchEvents();
+
+                // Adds the fancy status gauges, registers update UI loop etc
                 initUI();
 
             });
             function stream_connect() {
-		var canvas = document.getElementById('mainImg'); 
+                var canvas = document.getElementById('mainImg');
 
-		// Work out the web socket URL since this page is on a dynamic URL 
-		var uri = (location.protocol.match(/^https/) ? "wss" : "ws") + "://" + location.hostname+(location.port ? ':'+location.port: '') + "/h264-streamer"; 
+                // Work out the web socket URL since this page is on a dynamic URL 
+                var uri = (location.protocol.match(/^https/) ? "wss" : "ws") + "://" + location.hostname + (location.port ? ':' + location.port : '') + "/h264-streamer";
 
-		// Create h264 player 
-		var wsavc = new WSAvcPlayer(canvas, "webgl", 1, 35); 
-		wsavc.connect(uri); 
+                // Create h264 player 
+                var wsavc = new WSAvcPlayer(canvas, "webgl", 1, 35);
+                wsavc.connect(uri);
 
-		//expose instance for subsequent button callbacks 
-		window.wsavc = wsavc;
+                //expose instance for subsequent button callbacks 
+                window.wsavc = wsavc;
             }
 
         </script>
     </head>
     <body>
 
+        <canvas id="gauge3" class="topLeft"></canvas>
+        <canvas id="gauge1" class="topRight"></canvas>
+
+        <div class="joystick middleLeft" id="stick1">
+            <div class="handle"></div>
+        </div>
 
         <div id="container" oncontextmenu="return false;">
-            <!-- <img src="images/test_pattern.png" alt="Video Feed" id="mainImg"/> -->
             <canvas id="mainImg"></canvas>
         </div>
-        <canvas id="gauge1" class="topRight"></canvas>
+
+        <div class="joystick middleRight" id="stick2">
+            <div class="handle"></div>
+        </div>
+        
         <canvas id="gauge2" class="bottomLeft"></canvas>
-        <canvas id="gauge3" class="topLeft"></canvas>
+        
         <img id="upIcon" src="images/icons8-up-40.png" class="bottomRight" style="display: none;" alt="Up"/>
         <img id="downIcon" src="images/icons8-down-40.png" class="bottomRight" style="display: none;" alt="Down"/>
 
@@ -78,7 +87,7 @@
         </form>
         <span id="message"></span>
         <br/>
-	<table>
+        <table>
             <tr><td>Uptime:</td><td><span id="uptime">--</span> days</td></tr>
             <tr><td>Command Latency:</td><td><span id="ping">--</span> ms</td></tr>
             <tr><td>CPU Temp:</td><td><span id="temp">--</span>&#176;C</td></tr>
@@ -86,7 +95,7 @@
             <tr><td>Input Voltage:</td><td><span id="voltage">--</span> V</td></tr>
             <tr><td>Current Drain:</td><td><span id="current">--</span> mA</td></tr>
             <tr><td>Input Power:</td><td><span id="power">--</span> W</td></tr>
-	</table>
+        </table>
         <hr/>
 
 
@@ -110,6 +119,6 @@
             </div>
 
         </div>    
-        
+
     </body>
 </html>
