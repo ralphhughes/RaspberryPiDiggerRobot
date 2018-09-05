@@ -4511,6 +4511,10 @@ var WSAvcPlayer = new Class({
     log("Sent " + message);
   },
 
+  sendCustomCmd : function(cmd) {
+    this.ws.send(cmd);  
+    log("Sent " + cmd);
+  },
 
   stopStream : function() {
     this.ws.send("STOPSTREAM");
