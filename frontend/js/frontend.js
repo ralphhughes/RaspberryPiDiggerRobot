@@ -125,6 +125,13 @@ function cropToRange(value, min, max) {
     return value;
 }
 
+function setDeadband(value, deadbandMagnitude) {
+    if (value >= -deadbandMagnitude && value <= deadbandMagnitude) {
+        value = 0;
+    }
+    return value;
+}
+
 // Function to wrap socket.send()
 function sendMessage(msg) {
     if (DEBUG) {
