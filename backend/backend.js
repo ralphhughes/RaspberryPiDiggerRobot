@@ -151,7 +151,7 @@ wsServer.on('request', function(request) {
         connection.sendUTF("uptime=" + os.uptime());
         
         ina219.getBusVoltage_V(function (volts) {
-            connection.sendUTF("volts=" + volts);
+            connection.sendUTF("voltage=" + volts);
         });
 
         ina219.getCurrent_mA(function (current) {
