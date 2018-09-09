@@ -62,13 +62,16 @@ ARM_LIMIT_SWITCH.on('alert', (level, tick) => {
   }
 });
 
+var ina219_detected = false;
 try {
     ina219.init();
     ina219.enableLogging(false);
     ina219.calibrate32V1A(function () {
+        ina219_detected = true;
         console.log("INA219 Sensor detected.");
     });
 } catch (err) {
+    ina219_detected = false;
     console.log(err.message);
 }
 
@@ -150,14 +153,15 @@ wsServer.on('request', function(request) {
         
         connection.sendUTF("uptime=" + os.uptime());
         
-        ina219.getBusVoltage_V(function (volts) {
-            connection.sendUTF("voltage=" + volts);
-        });
+        if (ina219_detected) {
+            ina219.getBusVoltage_V(function (volts) {
+                connection.sendUTF("voltage=" + volts);
+            });
 
-        ina219.getCurrent_mA(function (current) {
-            connection.sendUTF("current=" + current);
-        });
-
+            ina219.getCurrent_mA(function (current) {
+                connection.sendUTF("current=" + current);
+            });
+        }
 
     }, the_interval);
 });
