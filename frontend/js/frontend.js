@@ -71,7 +71,7 @@ window.addEventListener("load", function (event) {
                 if (hours   < 10) {hours   = "0"+hours;}
                 if (minutes < 10) {minutes = "0"+minutes;}
                 if (seconds < 10) {seconds = "0"+seconds;}
-                $('#uptime').text(hours+':'+minutes+':'+seconds);
+                $('#uptime').text(hours+' hours, '+minutes+' minutes');
             }
             if (event.data.indexOf("ping=") > -1) {
                 var sentTime = event.data.split("=")[1];
@@ -83,7 +83,7 @@ window.addEventListener("load", function (event) {
             }
             if (event.data.indexOf("load=") > -1) {
                 var load = event.data.split("=")[1];
-                $('#load').text(load);
+                $('#load').text(parseFloat(load).toFixed(2));
             }
             if (event.data.indexOf("voltage=") > -1) {
                 var volts = event.data.split("=")[1];
