@@ -61,6 +61,18 @@ window.addEventListener("load", function (event) {
 
         // Display messages received from the server
         socket.addEventListener("message", function (event) {
+            if (event.data.indexOf("uptime=") > -1) {
+                var uptime = event.data.split("=")[1];
+                var sec_num = parseInt(uptime, 10);
+                var hours   = Math.floor(sec_num / 3600);
+                var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+                var seconds = sec_num - (hours * 3600) - (minutes * 60);
+
+                if (hours   < 10) {hours   = "0"+hours;}
+                if (minutes < 10) {minutes = "0"+minutes;}
+                if (seconds < 10) {seconds = "0"+seconds;}
+                $('uptime').text(hours+':'+minutes+':'+seconds);
+            }
             if (event.data.indexOf("ping=") > -1) {
                 var sentTime = event.data.split("=")[1];
                 ping.textContent = new Date().getTime() - sentTime;
@@ -69,14 +81,23 @@ window.addEventListener("load", function (event) {
                 var temperature = event.data.split("=")[1];
                 temp.textContent = temperature;
             }
+            if (event.data.indexOf("load=") > -1) {
+                var load = event.data.split("=")[1];
+                $('load').text(load);
+            }
             if (event.data.indexOf("voltage=") > -1) {
                 var volts = event.data.split("=")[1];
                 console.log('volts: ' + volts);
-                $('#voltage span').text(volts);
+                $('#voltage').text(volts);
             }
             if (event.data.indexOf("current=") > -1) {
                 var milliAmps = event.data.split("=")[1];
-                $('#current span').text(milliAmps);
+                if (milliAmps < 0) {
+                    $('#usb_status').text('Charging');
+                } else {
+                    $('#usb_status').text('Discharging');
+                }
+                $('#current').text(milliAmps);
             }
             message.textContent = "DEBUG: " + event.data;
         });
@@ -94,7 +115,6 @@ window.addEventListener("load", function (event) {
             }
             socket = null;
             clearInterval(pingTaskID);
-            mainImg.src = "images/test_pattern.png";
             send.disabled = true;
             message.textContent = "";
             connectBtn.value = "Connect";

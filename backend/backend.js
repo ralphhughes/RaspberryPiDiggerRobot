@@ -1,6 +1,7 @@
 "use strict";
 
 // <DEPENDENCIES>
+var os = require('os');
 var WebSocketServer = require('websocket').server;
 var http = require('http');
 var exec = require('child_process').exec;
@@ -135,29 +136,26 @@ wsServer.on('request', function(request) {
     });
     
     
-    var the_interval = 3000; // Every 3 seconds
+    var the_interval = 3000; // Every 3 seconds, send status info to the client
     setInterval(() => {
-        var child;
-
-        child = exec("vcgencmd measure_temp",
+        var child = exec("vcgencmd measure_temp",
                 function (error, stdout, stderr) {
-                    console.log('stdout: ' + stdout);
-                    console.log('stderr: ' + stderr);
                     stdout = stdout.replace("'C","");
                     connection.sendUTF(stdout);
                     if (error !== null) {
                         console.log('exec error: ' + error);
                     }
                 });
-
+        connection.sendUTF("load=" + os.loadavg()[0]);
+        
+        connection.sendUTF("uptime=" + os.uptime());
+        
         ina219.getBusVoltage_V(function (volts) {
             connection.sendUTF("volts=" + volts);
-            console.log((new Date().getTime() % 60000) + " Voltage: " + volts + "V");
         });
 
         ina219.getCurrent_mA(function (current) {
             connection.sendUTF("current=" + current);
-            console.log((new Date().getTime() % 60000) + " Current: " + current + "mA\n");
         });
 
 
