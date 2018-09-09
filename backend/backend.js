@@ -19,6 +19,7 @@ const WEBSOCKET_PORT = 1337;
 
 
 // Easier configuring here than moving wires inside the bot
+// Do NOT use GPIO 2 nd 3, they're in use for I2C comms!
 const STEERING_SERVO = new Gpio(24, {mode: Gpio.OUTPUT});
 const STEERING_SERVO_MIN_PULSE=770; // Steering servo has been tested and these are the max physical servo limits
 const STEERING_SERVO_MAX_PULSE=2250;
@@ -165,7 +166,7 @@ wsServer.on('request', function(request) {
 
 function openConnection() {
     console.log("Starting streaming webcam...");
-    execProcess("./start_webcam.sh");
+    // execProcess("./start_webcam.sh");
     console.log("Done.");
 }
 
@@ -176,7 +177,7 @@ function closeConnection() {
     
     
     console.log("Stopping streaming webcam to save power...");
-    execProcess("./stop_webcam.sh");
+    // execProcess("./stop_webcam.sh");
     
     console.log("Done.");
 }
