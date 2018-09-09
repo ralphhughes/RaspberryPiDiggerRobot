@@ -39,7 +39,7 @@ const TRACTION_MOTOR_PWM =  new Gpio(17, {mode: Gpio.OUTPUT});
 const TRACTION_MOTOR_A =    new Gpio(27, {mode: Gpio.OUTPUT});
 const TRACTION_MOTOR_B =    new Gpio(4, {mode: Gpio.OUTPUT});
 
-const ARM_LIMIT_SWITCH = new Gpio(2, {
+const ARM_LIMIT_SWITCH = new Gpio(19, {
   mode: Gpio.INPUT,
   pullUpDown: Gpio.PUD_UP,
   alert: true
@@ -62,8 +62,7 @@ ARM_LIMIT_SWITCH.on('alert', (level, tick) => {
 
 try {
     ina219.init();
-    ina219.enableLogging(true);
-
+    ina219.enableLogging(false);
     ina219.calibrate32V1A(function () {
         console.log("INA219 Sensor detected.");
     });
@@ -143,6 +142,7 @@ wsServer.on('request', function(request) {
                 function (error, stdout, stderr) {
                     console.log('stdout: ' + stdout);
                     console.log('stderr: ' + stderr);
+                    stdout = stdout.replace("'C","");
                     connection.sendUTF(stdout);
                     if (error !== null) {
                         console.log('exec error: ' + error);

@@ -66,12 +66,12 @@ window.addEventListener("load", function (event) {
                 ping.textContent = new Date().getTime() - sentTime;
             }
             if (event.data.indexOf("temp=") > -1) {
-                var tmp = event.data.split("=")[1];
-		tmp = tmp.replace("'C","");
-                temp.textContent = tmp;
+                var temperature = event.data.split("=")[1];
+                temp.textContent = temperature;
             }
             if (event.data.indexOf("voltage=") > -1) {
                 var volts = event.data.split("=")[1];
+                console.log('volts: ' + volts);
                 $('#voltage span').text(volts);
             }
             if (event.data.indexOf("current=") > -1) {
