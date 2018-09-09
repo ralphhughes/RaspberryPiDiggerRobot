@@ -8,6 +8,8 @@ var exec = require('child_process').exec;
 // Standardising on this gpio library instead of the other two.
 const Gpio = require('pigpio').Gpio;        // https://github.com/fivdi/pigpio
 
+var ina219 = require('ina219');
+
 // </DEPENDENCIES>
 
 
@@ -58,7 +60,16 @@ ARM_LIMIT_SWITCH.on('alert', (level, tick) => {
   }
 });
 
+try {
+    ina219.init();
+    ina219.enableLogging(true);
 
+    ina219.calibrate32V1A(function () {
+        console.log("INA219 Sensor detected.");
+    });
+} catch (err) {
+    console.log(err.message);
+}
 
 var server = http.createServer(function(request, response) {
     console.log((new Date()) + ' Received HTTP request on ' + WEBSOCKET_PORT + ' for ' + request.url);
@@ -124,9 +135,8 @@ wsServer.on('request', function(request) {
     });
     
     
-    var the_interval = 1 * 60 * 1000;
+    var the_interval = 3000; // Every 3 seconds
     setInterval(() => {
-        console.log("Once per minute timer fired.");
         var child;
 
         child = exec("vcgencmd measure_temp",
@@ -138,6 +148,17 @@ wsServer.on('request', function(request) {
                         console.log('exec error: ' + error);
                     }
                 });
+
+        ina219.getBusVoltage_V(function (volts) {
+            connection.sendUTF("volts=" + volts);
+            console.log((new Date().getTime() % 60000) + " Voltage: " + volts + "V");
+        });
+
+        ina219.getCurrent_mA(function (current) {
+            connection.sendUTF("current=" + current);
+            console.log((new Date().getTime() % 60000) + " Current: " + current + "mA\n");
+        });
+
 
     }, the_interval);
 });

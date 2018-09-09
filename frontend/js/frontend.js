@@ -4,7 +4,6 @@ var DEBUG = true;
 
 // Global variables
 var WEBSOCKET_URL = (location.protocol.match(/^https/) ? "wss" : "ws") + "://" + location.hostname+(location.port ? ':'+location.port: '') + "/websockets";
-var WEBCAM_URL = "/webcam?action=stream";
 
 // Aspect ratio is 3:4, width and height should be multiples of 16, so:
 // 192x256, 288x384*,  336x448, 384x512, 432x576, 480x640, 540x720, 600x800 or even 720x960?
@@ -36,13 +35,7 @@ window.addEventListener("load", function (event) {
     var message = document.getElementById("message");
     var ping = document.getElementById("ping");
     var temp = document.getElementById("temp");
-    var mainImg = document.getElementById("mainImg");
-    var objDiv = document.getElementById('container');
-
-    objDiv.style.width = VIEWPORT_WIDTH + "px";
-    objDiv.style.height = VIEWPORT_HEIGHT + "px";
-    mainImg.style.width = VIEWPORT_WIDTH + "px";
-    mainImg.style.height = VIEWPORT_HEIGHT + "px";
+    
     send.disabled = true;
 
     // Create a new connection when the Connect button is clicked
@@ -62,13 +55,8 @@ window.addEventListener("load", function (event) {
             send.disabled = false;
             connectBtn.value = "Disconnect";
 
-            // TODO: Really this should be a callback from the robot to say the camera has
-            // successfully fired up instead of just wait and hope...
-            window.setTimeout(function() {
-                mainImg.src = WEBCAM_URL;
-            },1000);
             
-            pingTaskID = setInterval(pingRobot, 20000);
+            pingTaskID = setInterval(pingRobot, 5000);
         });
 
         // Display messages received from the server
@@ -81,6 +69,14 @@ window.addEventListener("load", function (event) {
                 var tmp = event.data.split("=")[1];
 		tmp = tmp.replace("'C","");
                 temp.textContent = tmp;
+            }
+            if (event.data.indexOf("voltage=") > -1) {
+                var volts = event.data.split("=")[1];
+                $('#voltage span').text(volts);
+            }
+            if (event.data.indexOf("current=") > -1) {
+                var milliAmps = event.data.split("=")[1];
+                $('#current span').text(milliAmps);
             }
             message.textContent = "DEBUG: " + event.data;
         });
