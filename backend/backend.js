@@ -156,6 +156,7 @@ wsServer.on('request', function(request) {
         if (ina219_detected) {
             ina219.getBusVoltage_V(function (volts) {
                 connection.sendUTF("voltage=" + volts);
+                connection.sendUTF("batt_percent=" + getBattPercent(volts));
             });
 
             ina219.getCurrent_mA(function (current) {
@@ -280,3 +281,42 @@ function cropToRange(value, min, max) {
     }
     return value;
 }
+function getBattPercent(voltage) {
+    var batt_percentages = [0, 0.4, 0.5, 0.7, 1, 1.3, 1.6, 2, 2.4, 3, 4.1, 6.2, 7.8, 9.6, 11.5, 13.3, 15.1, 17, 18.8, 20.7, 22.5, 24.4, 26.2, 28, 29.9, 31.7, 33.6, 35.4, 37.3, 39.1, 40.9, 42.8, 44.6, 46.5, 48.3, 50.2, 52, 53.8, 55.7, 57.5, 59.4, 61.2, 63.1, 64.9, 66.7, 68.6, 70.4, 72.3, 74.1, 76, 77.8, 79.6, 81.5, 83.3, 85.2, 87, 88.9, 90.7, 92.6, 94.4, 96.2, 98.1, 100];
+    var batt_voltages = [2.78, 2.86, 2.94, 3.01, 3.08, 3.17, 3.24, 3.31, 3.38, 3.45, 3.51, 3.57, 3.59, 3.61, 3.62, 3.63, 3.64, 3.66, 3.67, 3.68, 3.68, 3.69, 3.69, 3.7, 3.7, 3.71, 3.71, 3.71, 3.72, 3.72, 3.73, 3.73, 3.74, 3.75, 3.76, 3.77, 3.78, 3.79, 3.8, 3.81, 3.82, 3.84, 3.85, 3.87, 3.88, 3.9, 3.92, 3.94, 3.96, 3.98, 4, 4.02, 4.04, 4.06, 4.09, 4.11, 4.13, 4.15, 4.18, 4.2, 4.22, 4.25, 4.28];
+
+    if (batt_voltages.length !== batt_percentages.length) {
+        return null;
+    }
+    if (voltage < batt_voltages[0]) {
+        return 0;
+    }
+    if (voltage > batt_voltages[batt_voltages.length - 1]) {
+        return 100;
+    }
+    
+    // loop through batt_voltages and find if there's a match
+    // if there is, return value from batt_percentages with same value
+    for (var i = 0; i < batt_voltages.length; i++) {
+        if (batt_voltages[i] === voltage) {
+            return batt_percentages[i];
+        }
+    }
+    
+    // If we get to here, no exact match so need to find the voltages either side
+    var currentVolts, lastVolts;
+    for (var i = 0; i < batt_voltages.length; i++) {
+        currentVolts = batt_voltages[i];
+        if (voltage > lastVolts && voltage < currentVolts) {
+            // Interpolate
+            var fractionAcrossInterval = (voltage - lastVolts) / (currentVolts - lastVolts);
+            
+            var lowerPercent = batt_percentages[i - 1];
+            var upperPercent = batt_percentages[i];
+            
+            return lowerPercent + (fractionAcrossInterval * (upperPercent - lowerPercent));
+        }
+        lastVolts = currentVolts;
+    }
+}
+

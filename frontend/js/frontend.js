@@ -85,6 +85,10 @@ window.addEventListener("load", function (event) {
                 var load = event.data.split("=")[1];
                 $('#load').text(parseFloat(load).toFixed(2));
             }
+            if (event.data.indexOf("batt_percent=") > -1) {
+                var batt_percent = event.data.split("=")[1];
+                $('#batt_percent').text(Math.round(batt_percent));
+            }
             if (event.data.indexOf("voltage=") > -1) {
                 var volts = event.data.split("=")[1];
                 $('#voltage').text(volts);
