@@ -20,7 +20,7 @@ const WEBSOCKET_PORT = 1337;
 
 
 // Easier configuring here than moving wires inside the bot
-// Do NOT use GPIO 2 nd 3, they're in use for I2C comms!
+// Do NOT use GPIO 2 and 3, they're in use for I2C comms!
 const STEERING_SERVO = new Gpio(24, {mode: Gpio.OUTPUT});
 const STEERING_SERVO_MIN_PULSE=770; // Steering servo has been tested and these are the max physical servo limits
 const STEERING_SERVO_MAX_PULSE=2250;
@@ -62,18 +62,22 @@ ARM_LIMIT_SWITCH.on('alert', (level, tick) => {
   }
 });
 
-var ina219_detected = false;
+var INA219_DETECTED;
 try {
     ina219.init();
     ina219.enableLogging(false);
     ina219.calibrate32V1A(function () {
-        ina219_detected = true;
+        INA219_DETECTED = true;
         console.log("INA219 Sensor detected.");
     });
 } catch (err) {
-    ina219_detected = false;
+    INA219_DETECTED = false;
     console.log(err.message);
 }
+
+var piCamera = vcgencmd.getCamera();
+console.log("Camera supported: " + piCamera.supported);
+console.log("Camera detected: " + piCamera.detected);
 
 var server = http.createServer(function(request, response) {
     console.log((new Date()) + ' Received HTTP request on ' + WEBSOCKET_PORT + ' for ' + request.url);
@@ -148,7 +152,7 @@ wsServer.on('request', function(request) {
         
         connection.sendUTF("uptime=" + os.uptime());
         
-        if (ina219_detected) {
+        if (INA219_DETECTED) {
             ina219.getBusVoltage_V(function (volts) {
                 connection.sendUTF("voltage=" + volts);
                 connection.sendUTF("batt_percent=" + getBattPercent(volts));
