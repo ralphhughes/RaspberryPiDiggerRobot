@@ -141,14 +141,9 @@ wsServer.on('request', function(request) {
     
     var the_interval = 3000; // Every 3 seconds, send status info to the client
     setInterval(() => {
-        var child = exec("vcgencmd measure_temp",
-                function (error, stdout, stderr) {
-                    stdout = stdout.replace("'C","");
-                    connection.sendUTF(stdout);
-                    if (error !== null) {
-                        console.log('exec error: ' + error);
-                    }
-                });
+        
+        connection.sendUTF("temp=" + vcgencmd.measureTemp());
+        
         connection.sendUTF("load=" + os.loadavg()[0]);
         
         connection.sendUTF("uptime=" + os.uptime());
