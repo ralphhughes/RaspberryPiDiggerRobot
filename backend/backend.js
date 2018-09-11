@@ -6,10 +6,10 @@ var WebSocketServer = require('websocket').server;
 var http = require('http');
 var exec = require('child_process').exec;
 
-// Standardising on this gpio library instead of the other two.
-const Gpio = require('pigpio').Gpio;        // https://github.com/fivdi/pigpio
-
-var ina219 = require('ina219');
+// Pi specific libraries
+var Gpio = require('pigpio').Gpio;      // https://github.com/fivdi/pigpio
+var vcgencmd = require('vcgencmd');     // https://github.com/loyd/node-vcgencmd
+var ina219 = require('ina219');         // https://github.com/brettmarl/node-ina219
 
 // </DEPENDENCIES>
 
