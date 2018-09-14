@@ -12,7 +12,7 @@
         <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
         <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
         <link rel="manifest" href="images/site.webmanifest">
-        <link rel="mask-icon" href="images/safari-pinned-tab.svg" color="#5bbad5">
+        <link rel="mask-icon" href="images/safari-pinned-tab.svg">
         <link rel="shortcut icon" href="images/favicon.ico">
         <meta name="msapplication-TileColor" content="#da532c">
         <meta name="msapplication-config" content="images/browserconfig.xml">
@@ -59,7 +59,22 @@
                 //expose instance for subsequent button callbacks 
                 window.wsavc = wsavc;
             }
-
+            function stream_disconnect() {
+                wsavc.disconnect();
+                
+                // Clear canvas
+                var canvas = document.getElementById('mainImg');
+                var context = canvas.getContext("2d");
+                context.clearRect(0, 0, canvas.width, canvas.height);
+            }
+            function customCmd() {
+                wsavc.sendCustomCmd('t=0');
+                
+                // Double size experiment
+                var canvas = document.getElementById('mainImg');
+                var context = canvas.getContext("2d");
+                context.scale(2, 2);
+            }
         </script>
     </head>
     <body>
@@ -89,8 +104,8 @@
             <button type="button" onclick="stream_connect()">Connect to h264 websocket</button>
             <button type="button" onclick="wsavc.playStream()">Start Video</button>
             <button type="button" onclick="wsavc.stopStream()">Stop Video</button>
-            <button type="button" onclick="wsavc.disconnect()">Disconnect</button>
-            <button type="button" onclick="wsavc.sendCustomCmd('t=0')">Test</button>
+            <button type="button" onclick="stream_disconnect()">Disconnect</button>
+            <button type="button" onclick="customCmd()">Test</button>
         </form>
         <span id="message"></span>
         <br/>
