@@ -13,7 +13,7 @@ const NALseparator = new Buffer([0, 0, 0, 1]);//NAL break
 class RpiServer {
 
     get_feed() {
-        var streamer = spawn('raspivid', ['-t', '0', '-o', '-', '-w', this.options.width, '-h', this.options.height, '-fps', this.options.fps, '-pf', 'baseline']);
+        var streamer = spawn('raspivid', ['-t', '0', '-o', '-', '-w', this.options.width, '-h', this.options.height, '-fps', this.options.fps, '-rot', this.options.rotation, '-pf', 'baseline']);
         streamer.on("exit", function (code) {
             console.log("raspivid process exited with code ", code);
         });
@@ -50,7 +50,8 @@ class RpiServer {
         this.options = merge({
             width: 960,
             height: 540,
-            fps: 12
+            fps: 12,
+            rotation: 0
         }, options);
 
         this.counter = 0;
