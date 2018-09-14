@@ -16,7 +16,6 @@ var ina219 = require('ina219');         // https://github.com/brettmarl/node-ina
 
 
 // <CONFIG>
-// These ports should NOT be internet accessible!
 const WEBSOCKET_PORT = 1337;
 
 

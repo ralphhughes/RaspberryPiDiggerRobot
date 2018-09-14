@@ -1,9 +1,5 @@
 "use strict";
 
-/**
-* Run this on a raspberry pi 
-* then browse (using google chrome/firefox) to http://[pi ip]:8080/
-*/
 
 
 const http    = require('http');
