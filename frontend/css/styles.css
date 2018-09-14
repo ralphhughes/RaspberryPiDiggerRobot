@@ -60,7 +60,7 @@
     display: none;  /* Hidden by default, shown by JS */
     width: 130px;
     height: 130px;
-    background-color: #eee;
+    border: 1px solid #eee;
     border-radius: 5px;
 }
 .joystick .handle {
