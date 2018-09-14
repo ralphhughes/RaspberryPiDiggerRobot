@@ -7,7 +7,8 @@ var http = require('http');
 var exec = require('child_process').exec;
 
 // Pi specific libraries
-var Gpio = require('pigpio').Gpio;      // https://github.com/fivdi/pigpio
+// var Gpio = require('pigpio').Gpio;      // https://github.com/fivdi/pigpio
+var Gpio = require('pigpio-mock').Gpio;
 var vcgencmd = require('vcgencmd');     // https://github.com/loyd/node-vcgencmd
 var ina219 = require('ina219');         // https://github.com/brettmarl/node-ina219
 
@@ -21,11 +22,11 @@ const WEBSOCKET_PORT = 1337;
 
 // Easier configuring here than moving wires inside the bot
 // Do NOT use GPIO 2 and 3, they're in use for I2C comms!
-const STEERING_SERVO = new Gpio(24, {mode: Gpio.OUTPUT});
+const STEERING_SERVO = new Gpio(21, {mode: Gpio.OUTPUT});
 const STEERING_SERVO_MIN_PULSE=770; // Steering servo has been tested and these are the max physical servo limits
 const STEERING_SERVO_MAX_PULSE=2250;
 
-const BUCKET_SERVO = new Gpio(25, {mode: Gpio.OUTPUT});
+const BUCKET_SERVO = new Gpio(20, {mode: Gpio.OUTPUT});
 const BUCKET_SERVO_MIN_PULSE=1000;
 const BUCKET_SERVO_MAX_PULSE=2000;
 
@@ -48,11 +49,11 @@ const ARM_LIMIT_SWITCH = new Gpio(19, {
 });
 
 // Level must be stable for 10 ms before an alert event is emitted.
-ARM_LIMIT_SWITCH.glitchFilter(10000);
+// ARM_LIMIT_SWITCH.glitchFilter(10000);
 
 // </CONFIG>
 
-
+/*
 ARM_LIMIT_SWITCH.on('alert', (level, tick) => {
   if (level === 0) {
     console.log('Switch: 0');
@@ -61,6 +62,7 @@ ARM_LIMIT_SWITCH.on('alert', (level, tick) => {
     console.log('Switch: 1');
   }
 });
+*/
 
 var INA219_DETECTED;
 try {
