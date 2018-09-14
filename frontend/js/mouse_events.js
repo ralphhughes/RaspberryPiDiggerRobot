@@ -13,7 +13,7 @@ function addMouseHandlers() {
     $("#mainImg").mousemove(function (e) {
         var parentOffset = $(this).parent().offset();
         var x = (e.pageX - parentOffset.left); //offset -> method allows you to retrieve the current position of an element 'relative' to the document
-        x = Math.round(((x / VIEWPORT_WIDTH) * 120) - 10);
+        x = Math.round(((x / $('#mainImg')[0].width) * 120) - 10);
 
         // Full power band round edge of div to make it easier to hold mouse on 100%
         if (x > 100) {

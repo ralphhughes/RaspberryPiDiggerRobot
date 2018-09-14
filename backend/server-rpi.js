@@ -23,3 +23,5 @@ var options = {
 const silence = new WebStreamerServer(server, options);
 
 server.listen(8080);
+
+console.log('H264 streamer started.');
