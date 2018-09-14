@@ -13,6 +13,7 @@ const server = http.createServer(function (request, response) {
 });
 
 var options = {
+    // Camera aspect ratio is 4:3, width and height should be multiples of 16
     width: 640,
     height: 480,
     fps: 10,
