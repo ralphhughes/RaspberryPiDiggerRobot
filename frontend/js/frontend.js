@@ -86,7 +86,7 @@ window.addEventListener("load", function (event) {
             }
             if (event.data.indexOf("voltage=") > -1) {
                 var volts = event.data.split("=")[1];
-                $('#voltage').text(volts);
+                $('#voltage').text(parseFloat(volts).toFixed(2));
             }
             if (event.data.indexOf("current=") > -1) {
                 var milliAmps = event.data.split("=")[1];
