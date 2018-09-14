@@ -37,6 +37,12 @@
     bottom: 0px;
     left: 0px;
 }
+.bottomCenter {
+    position: absolute;
+    bottom: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+}
 .bottomRight {
     position: absolute;
     bottom: 0px;
