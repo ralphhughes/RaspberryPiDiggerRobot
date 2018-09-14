@@ -17,7 +17,7 @@
         <meta name="msapplication-TileColor" content="#da532c">
         <meta name="msapplication-config" content="images/browserconfig.xml">
         <meta name="theme-color" content="#ffffff">
-        
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script> -->
         <script src="lib/jquery.mousewheel.min.js"></script>
@@ -61,29 +61,29 @@
             }
             function stream_disconnect() {
                 wsavc.disconnect();
-                
+
                 // Clear canvas
                 var canvas = document.getElementById('mainImg');
-                var context = canvas.getContext("2d");
-                context.clearRect(0, 0, canvas.width, canvas.height);
+                //var context = canvas.getContext("2d");        // Context is always null due to webgl canvas type
+                //context.clearRect(0, 0, canvas.width, canvas.height);
             }
             function customCmd() {
                 wsavc.sendCustomCmd('t=0');
-                
+
                 // Double size experiment
                 var canvas = document.getElementById('mainImg');
-                var context = canvas.getContext("2d");
-                context.scale(2, 2);
+                //var context = canvas.getContext("2d");        // Context is always null due to webgl canvas type
+                //context.scale(2, 2);
             }
         </script>
     </head>
     <body>
 
-       <canvas id="mainImg" class="centerScreen" oncontextmenu="return false;"></canvas>
-        
+        <canvas id="mainImg" class="centerScreen" oncontextmenu="return false;"></canvas>
+
         <canvas id="gauge1" class="topLeft"></canvas>
-        <canvas id="gauge3" class="topRight"></canvas>
-        <canvas id="gauge2" class="bottomLeft"></canvas>
+        <canvas id="gauge3" class="topRight" style="right: -70px;"></canvas>
+        <canvas id="gauge2" class="bottomLeft" style="bottom: -70px;"></canvas>
         <img id="upIcon" src="images/icons8-up-40.png" class="bottomRight" style="display: none;" alt="Up"/>
         <img id="downIcon" src="images/icons8-down-40.png" class="bottomRight" style="display: none;" alt="Down"/>
 
@@ -93,36 +93,37 @@
         <div class="joystick middleRight" id="stick2">
             <div class="handle"></div>
         </div>
-        
-<div id="debug" style="position: absolute; top: 100%;">
-        <hr/>
-
-        <h5>Debug</h5>
-        <form>
-            <input id="connect" type="button" value="Connect to command websocket" />&nbsp;
-            <input id="text" />&nbsp;<input id="send" type="button" value="Send" /><br />
-            <button type="button" onclick="stream_connect()">Connect to h264 websocket</button>
-            <button type="button" onclick="wsavc.playStream()">Start Video</button>
-            <button type="button" onclick="wsavc.stopStream()">Stop Video</button>
-            <button type="button" onclick="stream_disconnect()">Disconnect</button>
-            <button type="button" onclick="customCmd()">Test</button>
-        </form>
-        <span id="message"></span>
-        <br/>
-        <table>
-            <tr><td>Uptime:</td><td><span id="uptime">--</span></td></tr>
-            <tr><td>Command Latency:</td><td><span id="ping">--</span>ms</td></tr>
-            <tr><td>CPU Temp:</td><td><span id="temp">--</span>&#176;C</td></tr>
-            <tr><td>CPU Load:</td><td><span id="load">--</span></td></tr>
-            <tr><td>Battery Status: </td><td><span id="usb_status">--</span></td></tr>
-            <tr><td>Battery Left: </td><td><span id="batt_percent">--</span>%</td></tr>
-            <tr><td>Battery Voltage:</td><td><span id="voltage">--</span>V</td></tr>
-            <tr><td>Battery Current: </td><td><span id="current">--</span>mA</td></tr>
-        </table>
-        <hr/>
-
-</div>
         <button id="btnHelp" class="bottomCenter">Instructions \ Help</button>
+
+
+        <div id="debug" style="position: absolute; top: 100%;">
+            <hr/>
+
+            <h5>Debug</h5>
+            <form>
+                <input id="connect" type="button" value="Connect to command websocket" />&nbsp;
+                <input id="text" />&nbsp;<input id="send" type="button" value="Send" /><br />
+                <button type="button" onclick="stream_connect()">Connect to h264 websocket</button>
+                <button type="button" onclick="wsavc.playStream()">Start Video</button>
+                <button type="button" onclick="wsavc.stopStream()">Stop Video</button>
+                <button type="button" onclick="stream_disconnect()">Disconnect</button>
+                <button type="button" onclick="customCmd()">Test</button>
+            </form>
+            <span id="message"></span>
+            <br/>
+            <table>
+                <tr><td>Uptime:</td><td><span id="uptime">--</span></td></tr>
+                <tr><td>Command Latency:</td><td><span id="ping">--</span>ms</td></tr>
+                <tr><td>CPU Temp:</td><td><span id="temp">--</span>&#176;C</td></tr>
+                <tr><td>CPU Load:</td><td><span id="load">--</span></td></tr>
+                <tr><td>Battery Status: </td><td><span id="usb_status">--</span></td></tr>
+                <tr><td>Battery Left: </td><td><span id="batt_percent">--</span>%</td></tr>
+                <tr><td>Battery Voltage:</td><td><span id="voltage">--</span>V</td></tr>
+                <tr><td>Battery Current: </td><td><span id="current">--</span>mA</td></tr>
+            </table>
+            <hr/>
+
+        </div>
 
 
         <div id="modalHelpDiv" class="modal">
