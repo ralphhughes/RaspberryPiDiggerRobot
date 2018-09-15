@@ -7,8 +7,8 @@ var http = require('http');
 var exec = require('child_process').exec;
 
 // Pi specific libraries
-// var Gpio = require('pigpio').Gpio;      // https://github.com/fivdi/pigpio
-var Gpio = require('pigpio-mock').Gpio;
+var Gpio = require('pigpio').Gpio;      // https://github.com/fivdi/pigpio
+// var Gpio = require('pigpio-mock').Gpio;
 var vcgencmd = require('vcgencmd');     // https://github.com/loyd/node-vcgencmd
 var ina219 = require('ina219');         // https://github.com/brettmarl/node-ina219
 
@@ -29,17 +29,17 @@ const BUCKET_SERVO = new Gpio(20, {mode: Gpio.OUTPUT});
 const BUCKET_SERVO_MIN_PULSE=1000;
 const BUCKET_SERVO_MAX_PULSE=2000;
 
-const CAMERA_SERVO = new Gpio(1, {mode: Gpio.OUTPUT});
+const CAMERA_SERVO = new Gpio(25, {mode: Gpio.OUTPUT});
 const CAMERA_SERVO_MIN_PULSE=1000;
 const CAMERA_SERVO_MAX_PULSE=2000;
 
-const ARM_MOTOR_PWM = new Gpio(26, {mode: Gpio.OUTPUT});
-const ARM_MOTOR_A   = new Gpio(5, {mode: Gpio.OUTPUT});
-const ARM_MOTOR_B   = new Gpio(6, {mode: Gpio.OUTPUT});
+const ARM_MOTOR_PWM = new Gpio(17, {mode: Gpio.OUTPUT});
+const ARM_MOTOR_A   = new Gpio(4, {mode: Gpio.OUTPUT});
+const ARM_MOTOR_B   = new Gpio(27, {mode: Gpio.OUTPUT});
 
-const TRACTION_MOTOR_PWM =  new Gpio(17, {mode: Gpio.OUTPUT});
-const TRACTION_MOTOR_A =    new Gpio(27, {mode: Gpio.OUTPUT});
-const TRACTION_MOTOR_B =    new Gpio(4, {mode: Gpio.OUTPUT});
+const TRACTION_MOTOR_PWM =  new Gpio(26, {mode: Gpio.OUTPUT});
+const TRACTION_MOTOR_A =    new Gpio(5, {mode: Gpio.OUTPUT});
+const TRACTION_MOTOR_B =    new Gpio(6, {mode: Gpio.OUTPUT});
 
 const ARM_LIMIT_SWITCH = new Gpio(19, {
   mode: Gpio.INPUT,
