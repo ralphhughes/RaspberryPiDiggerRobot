@@ -6,7 +6,7 @@
   "dependencies": {
     "ina219": "0.6.1",
     "mout": "1.1.0",
-    "pigpio": "1.1.2",
+    "pigpio": "1.2.1",
     "pigpio-mock": "0.0.1",
     "stream-split": "1.1.0",
     "stream-throttle": "0.1.3",
