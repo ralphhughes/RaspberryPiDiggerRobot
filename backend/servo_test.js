@@ -43,7 +43,7 @@ process.stdin.on('keypress', (str, key) => {
         }
         servo1.servoWrite(pulse1);
         servo2.servoWrite(pulse2);
-        servo2.servoWrite(pulse3);
+        servo3.servoWrite(pulse3);
         console.log("1: GPIO21: Steering " + pulse1);
         console.log("2: GPIO20: Bucket   " + pulse2);
         console.log("3: GPIO25: Camera   " + pulse3);
