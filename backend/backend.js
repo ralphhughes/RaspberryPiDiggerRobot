@@ -30,8 +30,8 @@ const BUCKET_SERVO_MIN_PULSE=1000;
 const BUCKET_SERVO_MAX_PULSE=2000;
 
 const CAMERA_SERVO = new Gpio(25, {mode: Gpio.OUTPUT});
-const CAMERA_SERVO_MIN_PULSE=1000;
-const CAMERA_SERVO_MAX_PULSE=2000;
+const CAMERA_SERVO_MIN_PULSE=700;
+const CAMERA_SERVO_MAX_PULSE=2300;
 
 const ARM_MOTOR_PWM = new Gpio(17, {mode: Gpio.OUTPUT});
 const ARM_MOTOR_A   = new Gpio(4, {mode: Gpio.OUTPUT});
@@ -73,7 +73,7 @@ try {
     });
 } catch (err) {
     INA219_DETECTED = false;
-    console.log(err.message);
+    console.log("INA219: " + err.message);
 }
 
 var piCamera = vcgencmd.getCamera();
