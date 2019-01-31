@@ -11,21 +11,29 @@ function addMouseHandlers() {
 
     // Event handler for controlling camera servo dependent on mouse position
     $("#mainImg").mousemove(function (e) {
-        var parentOffset = $(this).parent().offset();
-        var x = (e.pageX - parentOffset.left); //offset -> method allows you to retrieve the current position of an element 'relative' to the document
-        x = Math.round(((x / $('#mainImg')[0].width) * 120) - 10);
+        var offset = $(this).offset();
+        var x = (e.pageX - offset.left); //offset -> method allows you to retrieve the current position of an element 'relative' to the document
 
-        // Full power band round edge of div to make it easier to hold mouse on 100%
+	// Add 10% band on the left and right of the img that will map to 0 and 1000
+        x = Math.round(((x / $('#mainImg')[0].width) * 120) - 10);
+	console.log("X: " + x);
+
+        // Clamp the full power band round edge of div to make it easier to hold mouse on 100%
         if (x > 100) {
             x = 100;
         }
         if (x < 0) {
             x = 0;
         }
-        x = 100-x; 
-        
-        cameraServo = x * 10; // TODO: Need better mapping
-        sendMessage("c=" + cameraServo);
+
+	// Flip horizontally for new servo pos
+        x = 100-x;
+
+	// Scale it
+	x = x * 10;
+
+	console.log("c=" + x);
+        sendMessage("c=" + x);
     });
 
     // Event handler for stopping arm motor when mouse is not on the video stream
