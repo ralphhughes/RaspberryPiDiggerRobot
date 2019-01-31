@@ -9,9 +9,9 @@ pulse2 = 1500;
 pulse3 = 1500;
 
 console.log("Servo pulses are being generated on the following channels:");
-console.log("1: GPIO21");
-console.log("2: GPIO20");
-console.log("3: GPIO25");
+console.log("1: GPIO21: Steering");
+console.log("2: GPIO20: Bucket");
+console.log("3: GPIO25: Camera");
 
 
 const readline = require('readline');
@@ -34,14 +34,21 @@ process.stdin.on('keypress', (str, key) => {
             case 's':
                 pulse2 += 10;
                 break;
+            case 'e':
+                pulse3 -= 10;
+                break;
+            case 'd':
+                pulse3 += 10;
+                break;    
         }
         servo1.servoWrite(pulse1);
         servo2.servoWrite(pulse2);
-        console.log(`You pressed the "${str}" key`);
-        console.log();
-        console.log(key);
-        console.log();
+        servo2.servoWrite(pulse3);
+        console.log("1: GPIO21: Steering " + pulse1);
+        console.log("2: GPIO20: Bucket   " + pulse2);
+        console.log("3: GPIO25: Camera   " + pulse3);
+
     }
 });
-console.log('Press any key...');
+console.log('Keys: qa, ws, ed');
 
