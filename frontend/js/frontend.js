@@ -26,7 +26,7 @@ var pingTaskID;
 window.addEventListener("load", function (event) {
     var connectBtn = document.getElementById("connect");
     var send = document.getElementById("send");
-    var text = document.getElementById("text");
+    var inputText = document.getElementById("text");
     var message = document.getElementById("message");
     var ping = document.getElementById("ping");
     var temp = document.getElementById("temp");
@@ -121,9 +121,8 @@ window.addEventListener("load", function (event) {
 
     // Send text to the server when the Send button is clicked
     send.addEventListener("click", function (event) {
-        starttime = new Date();
-        socket.send(text.value);
-        text.value = "";
+        sendMessage(inputText.value);
+        inputText.value = "";
     });
 
 });
