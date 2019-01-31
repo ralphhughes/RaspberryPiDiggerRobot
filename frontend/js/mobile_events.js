@@ -11,38 +11,48 @@ function addTouchEvents() {
     }, false);
 
     $(function () {
+        // Default position is centred for both joysticks
+        $('#stick1').joystick('value', 0.5, 0.5);
+        $('#stick2').joystick('value', 0.5, 0.5);
+        
         $('#stick1').joystick({
             moveEvent: function (pos) {
-                console.log('Joystick 1:' + pos.x + ', ' + pos.y);
+                console.log('LH joystick:' + pos.x + ', ' + pos.y);
                 tractionMotor = (pos.y - 0.5) * 2 * 255;
                 tractionMotor = setDeadband(tractionMotor, 50);
                 tractionMotor = cropToRange(tractionMotor, -255, 255);
                 sendMessage("t=" + tractionMotor);
 
-                steeringServo = pos.x * 1000;
+                steeringServo = (1-pos.x) * 1000;
                 steeringServo = cropToRange(steeringServo, 0, 1000);
                 sendMessage("s=" + steeringServo);
             },
             endEvent: function (pos) {
                 sendMessage("t=0");
 
-                steeringServo = pos.x * 1000;
+                steeringServo = (1-pos.x) * 1000;
                 steeringServo = cropToRange(steeringServo, 0, 1000);
                 sendMessage("s=" + steeringServo);
             }
         });
         $('#stick2').joystick({
             moveEvent: function (pos) {
-                console.log('yaw:' + pos.x);
+                console.log('RH joystick:' + pos.x + ', ' + pos.y);
+                
+                bucketServo = pos.x * 1000;
+                bucketServo = cropToRange(bucketServo, 0, 1000);
+                sendMessage("b=" + bucketServo);
             },
             endEvent: function (pos) {
-                console.log('yaw:' + pos.x);
+                sendMessage("a=0");
+                
+                bucketServo = pos.x * 1000;
+                bucketServo = cropToRange(bucketServo, 0, 1000);
+                sendMessage("b=" + bucketServo);
             }
         });
 
-        // Default position is centred for both joysticks
-        $('#stick1').joystick('value', 0.5, 0.5);
-        $('#stick2').joystick('value', 0.5, 0.5);
+        
 
     });
 }

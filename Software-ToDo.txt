@@ -1,0 +1,24 @@
+-Right hand side thumbstick on mobile not working
+
+-Add password to interface!
+
+-Command values not init'd to sane defaults on client side
+
+-No way to move camera pan on mobile interface
+
+-----
+
+-The bucket angle gauge is stretching the page, probably needs overflow: hidden on container?
+
+-The video does not scale to a larger size on larger screens
+
+-Increase polling frequency of robot volts\amps\temp etc
+
+-On subsequent connects, need to click start video as well as connect?
+
+-The camera eats battery life. Needs a way of turning it off when no client is connected.
+
+-Benchmark PM2 - maybe overkill for an embedded device
+
+-Battery current reading is an instantaneous value, need something server side to poll
+ at a much higher rate and then present the average over the websocket connection every second
