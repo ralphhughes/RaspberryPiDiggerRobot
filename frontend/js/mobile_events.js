@@ -11,9 +11,6 @@ function addTouchEvents() {
     }, false);
 
     $(function () {
-        // Default position is centred for both joysticks
-        $('#stick1').joystick('value', 0.5, 0.5);
-        $('#stick2').joystick('value', 0.5, 0.5);
         
         $('#stick1').joystick({
             moveEvent: function (pos) {
@@ -52,6 +49,9 @@ function addTouchEvents() {
             }
         });
 
+        // Default position is centred for both joysticks
+        $('#stick1').joystick('value', 0.5, 0.5);
+        $('#stick2').joystick('value', 0.5, 0.5);
         
 
     });

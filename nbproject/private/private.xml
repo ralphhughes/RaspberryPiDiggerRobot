@@ -1,24 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="3">
+        <file>
+            <url>frontend/lib/http-live-player.js</url>
+            <bookmark id="1">
+                <name/>
+                <line>4374</line>
+                <key/>
+            </bookmark>
+            <bookmark id="2">
+                <name/>
+                <line>4492</line>
+                <key/>
+            </bookmark>
+            <bookmark id="3">
+                <name/>
+                <line>4507</line>
+                <key/>
+            </bookmark>
+        </file>
+    </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group name="Work"/>
         <group name="Home"/>
-        <group>
-            <file>file:/C:/Users/Ralph/Google%20Drive/Netbeans%20Projects/RaspberryPiDiggerRobot/backend/start_webcam.sh</file>
-            <file>file:/C:/Users/Ralph/Google%20Drive/Netbeans%20Projects/RaspberryPiDiggerRobot/frontend/mouse_events.js</file>
-            <file>file:/C:/Users/Ralph/Google%20Drive/Netbeans%20Projects/RaspberryPiDiggerRobot/README.md</file>
-            <file>file:/C:/Users/Ralph/Google%20Drive/Netbeans%20Projects/RaspberryPiDiggerRobot/frontend/index.html</file>
-            <file>file:/C:/Users/Ralph/Google%20Drive/Netbeans%20Projects/RaspberryPiDiggerRobot/frontend/frontend.js</file>
-            <file>file:/C:/Users/Ralph/Google%20Drive/Netbeans%20Projects/RaspberryPiDiggerRobot/frontend/keyboard_events.js</file>
-            <file>file:/C:/Users/Ralph/Google%20Drive/Netbeans%20Projects/RaspberryPiDiggerRobot/.git/config</file>
-        </group>
-        <group name="Personal">
-            <file>file:/C:/Users/rhughes/Google%20Drive/Netbeans%20Projects/RaspberryPiDiggerRobot/backend/backend.js</file>
-            <file>file:/C:/Users/rhughes/Google%20Drive/Netbeans%20Projects/RaspberryPiDiggerRobot/backend/raspivid.js</file>
-            <file>file:/C:/Users/rhughes/Google%20Drive/Netbeans%20Projects/RaspberryPiDiggerRobot/backend/server-rpi.js</file>
-            <file>file:/C:/Users/rhughes/Google%20Drive/Netbeans%20Projects/RaspberryPiDiggerRobot/frontend/h264.html</file>
-            <file>file:/C:/Users/rhughes/Google%20Drive/Netbeans%20Projects/RaspberryPiDiggerRobot/backend/_server.js</file>
-        </group>
+        <group name="Personal"/>
+        <group/>
     </open-files>
 </project-private>
