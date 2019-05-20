@@ -26,9 +26,6 @@ function addMouseHandlers() {
             x = 0;
         }
 
-	// Flip horizontally for new servo pos
-        x = 100-x;
-
 	// Scale it
 	x = x * 10;
 
