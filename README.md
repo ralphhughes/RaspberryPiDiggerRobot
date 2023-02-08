@@ -4,7 +4,7 @@ Code for an articulated 4WD robot chassis with digger arm\bucket. Very low laten
 
 # Install notes
 
-* Install Raspbian Lite onto a Pi Zero W
+* Install Raspbian Lite onto a Pi (Tested on Pi 1 rev 2 and Pi Zero W)
 
 * Headless setup so after burning image to SD, need valid wpa_supplicant.conf and ssh file.
 
@@ -22,41 +22,35 @@ Code for an articulated 4WD robot chassis with digger arm\bucket. Very low laten
 
 * Install dependencies 
 
-  `$ sudo apt-get install git nginx nodejs nodejs-legacy pigpio cmake libjpeg8-dev miniupnpc`
+  `$ sudo apt-get install git nginx nodejs npm pigpio miniupnpc`
 
 * Download this repo to the pi home directory
 ```
 $ cd ~
 $ git clone https://github.com/ralphhughes/RaspberryPiDiggerRobot.git
-$ cd RaspberryPiDiggerRobot
+```
+* Build the backend node dependencies
+```
+$ cd RaspberryPiDiggerRobot/backend
+$ npm install
 ```
 
-* Setup the web camera server
-
-  `$ ./install_webcam_server.sh`
-
-* Setup the web socket server
-
-  `$ ./install_websocket_server.sh`
-
-* symlink the frontend folder
+* Symlink the frontend folder in to the default nginx web root
 ```
-$ cd /var/www
-$ sudo rm -rf html
-$ sudo ln -s ~/RaspberryPiDiggerRobot/frontend ./html
+$ sudo rm -rf /var/www/html
+$ sudo ln -s ~/RaspberryPiDiggerRobot/frontend /var/www/html
 ```
 
-
-
-* Setup nginx to proxy the webcam server and the websocket server through port 80
+* Setup nginx to reverse proxy the webcam server and the websocket server so everything is accessible via only port 80
 ```
  $ cp ~/RaspberryPiDiggerRobot/backend/nginx_sites-enabled_default /etc/nginx/sites-enabled/default
- $ sudo systemctl restart nginx
+ $ sudo service nginx restart
 ```
 
-* Make the UPNP config and the web sockets server autostart on boot
+* Run the UPNP config and run the node server
 ```
 $ upnpc -a `hostname -I` 80 8080 TCP
 $ sudo nodejs ~/RaspberryPiDiggerRobot/backend/backend.js
-$ sudo reboot
 ```
+
+* Goto the hostname of your Pi in your web browser on a desktop or mobile device
