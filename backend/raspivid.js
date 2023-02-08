@@ -119,7 +119,7 @@ class RpiServer {
         }));
 
         socket.on("message", function (data) {
-            var cmd = "" + data, action = data.split(' ')[0];
+            var cmd = "" + data, action = data.toString().split(' ')[0];
             console.log("Incomming action '%s'", action);
 
             if (action == "STOPSTREAM" || (action == "REQUESTSTREAM" && !!self.streamer)) {

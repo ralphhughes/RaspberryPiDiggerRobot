@@ -9,8 +9,8 @@ var exec = require('child_process').exec;
 // Pi specific libraries
 var Gpio = require('pigpio').Gpio;      // https://github.com/fivdi/pigpio
 // var Gpio = require('pigpio-mock').Gpio;
-var vcgencmd = require('vcgencmd');     // https://github.com/loyd/node-vcgencmd
-var ina219 = require('ina219');         // https://github.com/brettmarl/node-ina219
+//var vcgencmd = require('vcgencmd');     // https://github.com/loyd/node-vcgencmd
+//var ina219 = require('ina219');         // https://github.com/brettmarl/node-ina219
 
 // </DEPENDENCIES>
 
@@ -76,9 +76,9 @@ try {
     console.log("INA219: " + err.message);
 }
 
-var piCamera = vcgencmd.getCamera();
-console.log("Camera supported: " + piCamera.supported);
-console.log("Camera detected: " + piCamera.detected);
+//var piCamera = vcgencmd.getCamera();
+//#console.log("Camera supported: " + piCamera.supported);
+//console.log("Camera detected: " + piCamera.detected);
 
 var server = http.createServer(function(request, response) {
     console.log((new Date()) + ' Received HTTP request on ' + WEBSOCKET_PORT + ' for ' + request.url);
