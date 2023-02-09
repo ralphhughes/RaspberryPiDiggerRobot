@@ -1,4 +1,4 @@
-var ina219 = require('ina219');
+var ina219 = require('./ina219');
 
 try {
     ina219.init();
