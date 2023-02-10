@@ -14,7 +14,7 @@
 				//portnum.value = window.location.port;
 				portnum.value=1337;
 			}, false);
-
+			
 			function connect() {
 				var url = '';
 				if (location.protocol === 'https:') {
@@ -26,24 +26,38 @@
 				url = url + ':' + document.getElementById('portnum').value;
 				url = url + document.getElementById('path').value;
 				
-				ws = new WebSocket(url);
-				
-				ws.onopen = function () {
-					console.log("Client CONNECTED");
-					ws.send("Client CONNECTED");
-				};
-				
-				ws.onmessage = function (evt) {
-					console.log(evt.data);
-				};
-				
-				ws.onerror = function (error) {
-					console.error(`WebSocket error: ${error}`);
-				};
-				ws.onclose = function () {
-					console.log("Client DISCONNECTED");
-				};	
-				
+				if (ws) {
+					ws.close(3001);
+				} else {
+					ws = new WebSocket(url);
+					
+					
+					ws.onopen = function () {
+						console.log("Client CONNECTED");
+						ws.send("Client CONNECTED");
+					};
+					
+					ws.onmessage = function (evt) {
+						console.log(evt.data);
+					};
+					
+					ws.onclose = function(evt) {
+						if (evt.code == 3001) {
+							console.log('websocket closed');
+							ws = null;
+							} else {
+							ws = null;
+							console.log('websocket connection error');
+						}
+					};
+					
+					ws.onerror = function(evt) {
+						if (ws.readyState == 1) {
+							console.log('websocket normal error: ' + evt.type);
+						}
+					};
+					
+				}
 				
 			}
 			function send() {
