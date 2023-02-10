@@ -1,0 +1,58 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>web socket test page</title>
+        <meta name="author" content="Ralph Hughes">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<script>
+			var ws;
+			function init() {
+				var hostname = document.getElementById('hostname');
+				hostname.value = window.location.hostname;
+				
+				var portnum = document.getElementById('portnum');
+				portnum.value = window.location.port;
+			}
+			function connect() {
+				var url = '';
+				if (location.protocol === 'https:') {
+					url = url + 'wss://';
+					} else {
+					url = url + 'ws://';
+				}
+				url = url + document.getElementById('hostname').value();
+				url = url + ':' + document.getElementById('portnum').value();
+				url = url + document.getElementById('path').value();
+				
+				ws = new WebSocket(url);
+				
+				ws.onopen = function () {
+					console.log("Client CONNECTED");
+					ws.send("Client CONNECTED");
+				};
+				
+				ws.onmessage = function (evt) {
+					console.log(evt.data);
+				};
+				
+				ws.onclose = function () {
+					console.log("Client DISCONNECTED");
+				};	
+				
+				
+			}
+			window.onload = init();
+		</script>
+	</head>
+	<body>
+		<input type="text" id="hostname" name="hostname" value=""/>
+		<input type="number" id="portnum" name="portnum" min="1" max="65535">
+		<input type="text" id="path" name="path" value="/ws"/>
+		<button type="button" onclick="connect()">Connect</button>
+		<input type="text" id="msg" name="msg" value=""/>
+		<button type="button" onclick="send()">Send</button>
+		<button type="button" onclick="disconnect()">Disconnect</button>
+	</body>
+	
+	
+</html>
