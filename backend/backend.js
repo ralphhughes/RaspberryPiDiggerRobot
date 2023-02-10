@@ -10,7 +10,7 @@ var exec = require('child_process').exec;
 var Gpio = require('pigpio').Gpio;      // https://github.com/fivdi/pigpio
 // var Gpio = require('pigpio-mock').Gpio;
 //var vcgencmd = require('vcgencmd');     // https://github.com/loyd/node-vcgencmd
-//var ina219 = require('ina219');         // https://github.com/brettmarl/node-ina219
+var ina219 = require('./ina219.js');         // https://github.com/brettmarl/node-ina219
 
 // </DEPENDENCIES>
 
@@ -62,6 +62,27 @@ ARM_LIMIT_SWITCH.on('alert', (level, tick) => {
   }
 });
 */
+
+process.stdin.resume();//so the program will not close instantly
+
+function exitHandler(options, exitCode) {
+    if (options.cleanup) console.log('clean');
+    if (exitCode || exitCode === 0) console.log(exitCode);
+    if (options.exit) process.exit();
+}
+
+//do something when app is closing
+process.on('exit', exitHandler.bind(null,{cleanup:true}));
+
+//catches ctrl+c event
+process.on('SIGINT', exitHandler.bind(null, {exit:true}));
+
+// catches "kill pid" (for example: nodemon restart)
+process.on('SIGUSR1', exitHandler.bind(null, {exit:true}));
+process.on('SIGUSR2', exitHandler.bind(null, {exit:true}));
+
+//catches uncaught exceptions
+process.on('uncaughtException', exitHandler.bind(null, {exit:true}));
 
 var INA219_DETECTED;
 try {
@@ -118,16 +139,18 @@ wsServer.on('request', function(request) {
     
     connection.on('message', function(message) {
         if (message.type === 'utf8') {
-            console.log('Received Message: ' + message.utf8Data);
+	    if (!message.utf8Data.startsWith('ping')) {
+                console.log('Received Message: ' + message.utf8Data);
 
-	    // May receive multiple commands separated by ','. If so iterate through them
-	    if (message.utf8Data.indexOf(',') > -1) {
-		var cmds = message.utf8Data.split(',');
-		for (var i=0; i < cmds.length; i++) {
-		    executeCmd(cmds[i]);
+    	        // May receive multiple commands separated by ','. If so iterate through them
+	        if (message.utf8Data.indexOf(',') > -1) {
+		    var cmds = message.utf8Data.split(',');
+		    for (var i=0; i < cmds.length; i++) {
+		        executeCmd(cmds[i]);
+		    }
+	        } else {
+		    executeCmd(message.utf8Data);
 		}
-	    } else {
-		executeCmd(message.utf8Data);
 	    }
             connection.sendUTF(message.utf8Data);
         } else if (message.type === 'binary') {
@@ -146,9 +169,9 @@ wsServer.on('request', function(request) {
     
     var the_interval = 3000; // Every 3 seconds, send status info to the client
     setInterval(() => {
-        
-        connection.sendUTF("temp=" + vcgencmd.measureTemp());
-        
+//        if( vcgencmd && vcgencmd !== "null" && vcgencmd !== "undefined" ){
+//	        connection.sendUTF("temp=" + vcgencmd.measureTemp());
+//        }
         connection.sendUTF("load=" + os.loadavg()[0]);
         
         connection.sendUTF("uptime=" + os.uptime());
