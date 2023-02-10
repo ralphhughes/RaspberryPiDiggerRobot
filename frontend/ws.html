@@ -6,13 +6,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<script>
 			var ws;
-			function init() {
+			document.addEventListener('DOMContentLoaded', function() {
 				var hostname = document.getElementById('hostname');
 				hostname.value = window.location.hostname;
 				
 				var portnum = document.getElementById('portnum');
-				portnum.value = window.location.port;
-			}
+				//portnum.value = window.location.port;
+				portnum.value=1337;
+			}, false);
+
 			function connect() {
 				var url = '';
 				if (location.protocol === 'https:') {
@@ -20,9 +22,9 @@
 					} else {
 					url = url + 'ws://';
 				}
-				url = url + document.getElementById('hostname').value();
-				url = url + ':' + document.getElementById('portnum').value();
-				url = url + document.getElementById('path').value();
+				url = url + document.getElementById('hostname').value;
+				url = url + ':' + document.getElementById('portnum').value;
+				url = url + document.getElementById('path').value;
 				
 				ws = new WebSocket(url);
 				
@@ -35,13 +37,23 @@
 					console.log(evt.data);
 				};
 				
+				ws.onerror = function (error) {
+					console.error(`WebSocket error: ${error}`);
+				};
 				ws.onclose = function () {
 					console.log("Client DISCONNECTED");
 				};	
 				
 				
 			}
-			window.onload = init();
+			function send() {
+				ws.send(document.getElementById('msg').value);
+			}
+			
+			function disconnect() {
+				ws.close();
+				console.log("socket closed");
+			}
 		</script>
 	</head>
 	<body>
@@ -49,8 +61,10 @@
 		<input type="number" id="portnum" name="portnum" min="1" max="65535">
 		<input type="text" id="path" name="path" value="/ws"/>
 		<button type="button" onclick="connect()">Connect</button>
+		<br/>
 		<input type="text" id="msg" name="msg" value=""/>
 		<button type="button" onclick="send()">Send</button>
+		<br/>
 		<button type="button" onclick="disconnect()">Disconnect</button>
 	</body>
 	

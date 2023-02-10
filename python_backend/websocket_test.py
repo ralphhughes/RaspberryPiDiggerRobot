@@ -1,60 +1,51 @@
 import tornado.web, tornado.ioloop, tornado.websocket 
-import io, os, socket
+import io, os, socket, asyncio
 
-serverPort = 1337
+tornado.ioloop.IOLoop.configure("tornado.platform.asyncio.AsyncIOLoop")
+io_loop = tornado.ioloop.IOLoop.current()
+asyncio.set_event_loop(io_loop.asyncio_loop)
+
+ws_port = 1337
+
+clients = []
+
+def bcint(message):
+	for client in clients:
+		client.write_message(message)
+		print("broadcasted")
+
+def Broadcast(message):
+	io_loop.asyncio_loop.call_soon_threadsafe(bcint, message)
 
 
-
-
-class wsHandler(tornado.websocket.WebSocketHandler):
-	connections = []
-
+class WSHandler(tornado.websocket.WebSocketHandler):
 	def open(self):
-		self.connections.append(self)
-		print("Connection opened")
-
-	def on_close(self):
-		self.connections.remove(self)
-		print("connection closed")
-
+		print('new connection')
+		clients.append(self)
+	  
 	def on_message(self, message):
-		print("Message: ", message)
-
-	@classmethod
-	def hasConnections(cl):
-		if len(cl.connections) == 0:
-			return False
-		return True
-
-	@classmethod
-	async def broadcast(cl, message):
-		for connection in cl.connections:
-			try:
-				await connection.write_message(message, True)
-			except tornado.websocket.WebSocketClosedError:
-				pass
-			except tornado.iostream.StreamClosedError:
-				pass
-
+		print('message received:  %s' % message)
+		
+		self.write_message("echo: " + message)
+ 
+	def on_close(self):
+		print('connection closed')
+		clients.remove(self)
+ 
 	def check_origin(self, origin):
 		return True
-
-
-
-
-requestHandlers = [
-	(r"/", wsHandler),
-	(r"/ws/", wsHandler),
-	(r"/websockets/", wsHandler)
-]
-
-try:
-	application = tornado.web.Application(requestHandlers)
-	application.listen(serverPort)
-	loop = tornado.ioloop.IOLoop.current()
-	print("Starting websocket server")
-	loop.start()
-	print("never executes?")
-except KeyboardInterrupt:
-	loop.stop()
-	print("Stopped web socket server")
+ 
+application = tornado.web.Application([
+	(r'/ws', WSHandler),
+])
+ 
+if __name__ == "__main__":
+	try:
+		http_server = tornado.httpserver.HTTPServer(application)
+		http_server.listen(ws_port)
+		print("Starting websocket server")
+		loop = tornado.ioloop.IOLoop.current()
+		loop.start()
+	except KeyboardInterrupt:
+		loop.stop()
+		print("\nStopped web socket server")
