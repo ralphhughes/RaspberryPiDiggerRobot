@@ -6,7 +6,8 @@ import io, os, socket
 # start configuration
 serverPort = 8000
 
-camera = PiCamera(sensor_mode=4, resolution='1296x972', framerate=30)
+#camera = PiCamera(sensor_mode=4, resolution='1296x972', framerate=30)
+camera = PiCamera(sensor_mode=6, resolution='640x480', framerate=20)
 camera.video_denoise = True
 camera.awb_mode = 'auto'
 camera.drc_strength = 'high'
@@ -17,7 +18,8 @@ camera.rotation = 180
 recordingOptions = {
     'format' : 'h264', 
     'quality' : 20, 
-    'profile' : 'high', 
+    # 'profile' : 'high', 
+	'profile': 'baseline',
     'level' : '4.2', 
     'intra_period' : 15, 
     'intra_refresh' : 'both', 
@@ -25,14 +27,6 @@ recordingOptions = {
     'sps_timing' : True
 }
 
-focusPeakingColor = '1.0, 0.0, 0.0, 1.0'
-focusPeakingthreshold = 0.055
-
-centerColor = '255, 0, 0, 1.0'
-centerThickness = 2
-
-gridColor = '255, 0, 0, 1.0'
-gridThickness = 2
 # end configuration
 
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -49,15 +43,6 @@ def getFile(filePath):
     file.close()
     return content
 
-#def templatize(content, replacements):
-#    tmpl = Template(content)
-#    return tmpl.substitute(replacements)
-
-#indexHtml = templatize(getFile('index.html'), {'ip':serverIp, 'port':serverPort, 'fps':camera.framerate})
-#centerHtml = templatize(getFile('center.html'), {'ip':serverIp, 'port':serverPort, 'fps':camera.framerate,'color':centerColor, 'thickness':centerThickness})
-#gridHtml = templatize(getFile('grid.html'), {'ip':serverIp, 'port':serverPort, 'fps':camera.framerate,'color':gridColor, 'thickness':gridThickness})
-#focusHtml = templatize(getFile('focus.html'), {'ip':serverIp, 'port':serverPort, 'fps':camera.framerate, 'color':focusPeakingColor, 'threshold':focusPeakingthreshold})
-#jmuxerJs = getFile('jmuxer.min.js')
 
 class StreamBuffer(object):
     def __init__(self,camera):
@@ -110,34 +95,9 @@ class wsHandler(tornado.websocket.WebSocketHandler):
     def check_origin(self, origin):
         return True
 
-#class indexHandler(tornado.web.RequestHandler):
-#    def get(self):
-#        self.write(indexHtml)
-
-#class centerHandler(tornado.web.RequestHandler):
-#    def get(self):
-#        self.write(centerHtml)
-
-#class gridHandler(tornado.web.RequestHandler):
-#    def get(self):
-#        self.write(gridHtml)
-
-#class focusHandler(tornado.web.RequestHandler):
-#    def get(self):
-#        self.write(focusHtml)
-
-#class jmuxerHandler(tornado.web.RequestHandler):
-#    def get(self):
-#        self.set_header('Content-Type', 'text/javascript')
-#        self.write(jmuxerJs)
 
 requestHandlers = [
     (r"/ws/", wsHandler)
-#    (r"/", indexHandler),
-#    (r"/center/", centerHandler),
-#    (r"/grid/", gridHandler),
-#    (r"/focus/", focusHandler),
-#    (r"/jmuxer.min.js", jmuxerHandler)
 ]
 
 try:

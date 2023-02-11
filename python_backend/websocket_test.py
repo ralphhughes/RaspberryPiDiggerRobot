@@ -9,14 +9,6 @@ ws_port = 1337
 
 clients = []
 
-def bcint(message):
-	for client in clients:
-		client.write_message(message)
-		print("broadcasted")
-
-def Broadcast(message):
-	io_loop.asyncio_loop.call_soon_threadsafe(bcint, message)
-
 
 class WSHandler(tornado.websocket.WebSocketHandler):
 	def open(self):
@@ -36,7 +28,7 @@ class WSHandler(tornado.websocket.WebSocketHandler):
 		return True
  
 application = tornado.web.Application([
-	(r'/ws', WSHandler)
+	(r'/websockets', WSHandler)
 ])
  
 if __name__ == "__main__":
