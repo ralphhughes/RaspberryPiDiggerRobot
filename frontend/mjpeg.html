@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>MJPEG Streamer test</title>
+		<link rel="icon" href="data:;base64,iVBORw0KGgo=">
+		<style>
+			#camera {
+				width: 100vw;
+				height: 75vw; /* for 4:3 aspect ratio */
+				max-height: 100vh;
+				max-width: 133.33vh; /* for 4:3 aspect ratio*/
+				margin: auto;
+				position: absolute;
+				top:0;bottom:0; /* vertical center */
+				left:0;right:0; /* horizontal center */
+				border: 1px solid #000000;
+				border-radius: 6px;
+			}
+		</style>
+		<script>
+			document.addEventListener('DOMContentLoaded', function() {
+				var protocol = window.location.protocol;
+				var hostname = window.location.hostname;
+				var port = 8080;
+				
+				var cam = document.getElementById('camera');
+				cam.src = protocol + "//" + hostname + ":" + port + "/stream/video.mjpeg";
+			});
+		</script>
+	</head>
+	<body>
+		<!-- Blank when page loads -->
+		<img id="camera" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" />
+	</body>
+</html>
