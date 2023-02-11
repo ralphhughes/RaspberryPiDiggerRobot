@@ -1,6 +1,16 @@
 # RaspberryPiDiggerRobot
-Code for an articulated 4WD robot chassis with digger arm\bucket. Very low latency webcam streaming and web sockets for control
+Code for an articulated 4WD robot chassis with digger arm\bucket. Very low latency webcam streaming 
+and web sockets for control.
 
+# Architecture notes
+
+- Frontend\UI is served on the root of http://<pi-hostname>:80/ by nginx
+- Motor control commands from the UI and info from the robot, such as current power use 
+are in a bidrectional websocket on ws://<pi-hostname>:1337/ws
+- The low latency webcam streaming is on port 8080. There are multiple options for video streaming:
+  - MJPEG stream from uv4l_raspicam service -> web browser <img> element
+  - h264 video from Videocore via MMAL -> raspi_vid -> nodejs websocket server -> JS websocket client in web browser -> live-player.js -> html5 <canvas> element
+  - h264 video from Videocore via MMAL -> Python picamera lib -> Python websocket server -> JS websocket client in web browser -> jmuxer.js -> html5 <video> element
 
 # Install notes
 
