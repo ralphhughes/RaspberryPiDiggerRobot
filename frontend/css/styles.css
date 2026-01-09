@@ -4,9 +4,6 @@
     margin-right: auto;
 }
 #mainImg {
-    /* position: absolute;
-    top: 0px;
-    left: 0px; */
     border: 1px solid #000000;
     border-radius: 6px;
 }
@@ -53,6 +50,10 @@
     top: 50%;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
+    transform-origin: center center;
+}
+.rotated180 {
+    transform: translate(-50%, -50%) rotate(180deg);
 }
 
 /* from mifi/jquery-joystick */

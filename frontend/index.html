@@ -75,6 +75,10 @@
                 //var context = canvas.getContext("2d");        // Context is always null due to webgl canvas type
                 //context.scale(2, 2);
             }
+            function reverseView() {
+                const mainImg = document.getElementById('mainImg');
+                mainImg.classList.toggle('rotated180');
+            }
         </script>
     </head>
     <body>
@@ -108,6 +112,7 @@
                 <button type="button" onclick="wsavc.stopStream()">Stop Video</button>
                 <button type="button" onclick="stream_disconnect()">Disconnect</button>
                 <button type="button" onclick="customCmd()">Test</button>
+                <button type="button" onclick="reverseView()">Toggle Reverse View</button>
             </form>
             <span id="message"></span>
             <br/>
